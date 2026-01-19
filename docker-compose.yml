@@ -69,17 +69,4 @@ volumes:
   postgres_data:
   redis_data:
   bundle_cache:
-```
 
-## 3. .dockerignore
-```
-.git
-.gitignore
-tmp/*
-log/*
-*.log
-.env
-.env.*
-node_modules/
-coverage/
-.DS_Store
