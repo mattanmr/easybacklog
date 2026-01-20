@@ -1,7 +1,8 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Load Ruby Version into Gemfile for use with Heroku, but strip patch version as not allowed with Heroku
-ruby File.read(File.expand_path("../.ruby-version", __FILE__)).strip.gsub(/\-p\d+$/, '')
+# ruby File.read(File.expand_path("../.ruby-version", __FILE__)).strip.gsub(/\-p\d+$/, '')
+# NOTE: Ruby version is managed by Docker image (ruby:2.7-bullseye)
 
 gem 'rails', '~> 3.2.18'
 gem 'pg'
@@ -98,7 +99,7 @@ group :test do
   gem 'email_spec'
   gem 'eventmachine', '~> 1.0.4'
   gem 'capybara-screenshot'
-  gem 'recursive-open-struct', :git => 'git://github.com/mattheworiordan/recursive-open-struct.git'
+  gem 'recursive-open-struct', :git => 'https://github.com/mattheworiordan/recursive-open-struct.git'
 end
 
 group :development do

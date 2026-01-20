@@ -1,8 +1,8 @@
 # Dockerfile
-FROM ruby:2.7.8
+FROM ruby:2.6-bullseye
 
 # Install dependencies
-RUN apt-get update -qq && apt-get install -y \
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     postgresql-client \
     nodejs \
     npm \
@@ -14,6 +14,9 @@ RUN apt-get update -qq && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
+# Copy .ruby-version first (needed by Gemfile)
+COPY .ruby-version ./
+
 # Copy Gemfile and Gemfile.lock
 COPY Gemfile Gemfile.lock ./
 
@@ -21,7 +24,9 @@ COPY Gemfile Gemfile.lock ./
 RUN git config --global url."https://".insteadOf git://
 
 # Install gems
-RUN gem install bundler -v 2.4.22
+RUN gem install bundler -v 1.17.3
+# Pre-install json gem that's compatible with Ruby 2.6
+RUN gem install json -v 2.3.0
 RUN bundle install
 
 # Copy the rest of the application

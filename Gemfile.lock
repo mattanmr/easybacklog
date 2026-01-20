@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/mattheworiordan/recursive-open-struct.git
+  remote: https://github.com/mattheworiordan/recursive-open-struct.git
   revision: 8178fa5432584f0397cf545badf8a26b7f339ed5
   specs:
     recursive-open-struct (0.2.2)
@@ -11,7 +11,7 @@ GIT
     rack-force_domain (0.3.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.2)
     ably (0.8.7)
