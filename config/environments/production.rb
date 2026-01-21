@@ -9,6 +9,9 @@ EasyBacklog::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
   # Specifies the header that your server uses for sending files and Sidekiq
   config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
 

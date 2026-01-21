@@ -12,6 +12,9 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Create app user and group (non-root for security)
+RUN groupadd -r appuser && useradd -r -g appuser -m -s /bin/bash appuser
+
 # Set working directory
 WORKDIR /app
 
@@ -37,6 +40,16 @@ RUN bundle install --jobs=4 --retry=3 --no-deployment
 
 # Copy the rest of the application
 COPY . .
+
+# Change ownership of app directory to app user
+RUN chown -R appuser:appuser /app
+
+# Create directories that need write permissions
+RUN mkdir -p tmp/pids tmp/cache tmp/sockets log && \
+    chown -R appuser:appuser tmp log
+
+# Switch to non-root user
+USER appuser
 
 # Precompile assets (if needed)
 # RUN bundle exec rake assets:precompile RAILS_ENV=production
