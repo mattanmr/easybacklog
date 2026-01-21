@@ -31,4 +31,12 @@ class PagesController < ApplicationController
   def raise_error
     raise "Intentional error thrown"
   end
+
+  def contact
+    # Auto-renders: app/views/pages/contact.html.haml
+  end
+
+  def faq
+    # Auto-renders: app/views/pages/faq.html.haml
+  end
 end
