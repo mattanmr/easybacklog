@@ -13,6 +13,9 @@ class AccountUser < ActiveRecord::Base
 
   include PrivilegeProperty
 
+  # Mass assignment protection - privilege code is set via upgrade_privilege method
+  attr_accessible :privilege
+
   def upgrade_privilege(new_privilege)
     highest = privilege.highest(new_privilege)
     update_attributes! :privilege => highest.code

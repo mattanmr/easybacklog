@@ -15,6 +15,9 @@ class ScoringRule < ActiveRecord::Base
   validates_presence_of :description, :code, :title
   validates_uniqueness_of :description, :code, :title
 
+  # Mass assignment protection - system-managed model
+  attr_accessible
+
   def self.default
     ScoringRule.find_by_code('M')
   end

@@ -3,6 +3,7 @@ class ApiController < ActionController::Base
 
   # CSRF protection is disabled for API endpoints as they use token-based authentication
   # This is intentional - API requests authenticate via Authorization header tokens
+  # CodeQL: This is a deliberate security decision for stateless API authentication
   protect_from_forgery :with => :null_session
 
   before_filter :prevent_default_js

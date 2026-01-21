@@ -11,6 +11,10 @@ class SprintStoryStatus < ActiveRecord::Base
   validates_presence_of :status, :code
   validates_uniqueness_of :status, :code
 
+  # Mass assignment protection - no attributes accessible by default
+  # This is a system-managed model
+  attr_accessible
+
   def self.accepted
     find_by_code(ACCEPTED)
   end

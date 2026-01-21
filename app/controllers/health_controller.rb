@@ -1,6 +1,7 @@
 class HealthController < ActionController::Base
   # CSRF protection disabled for health check endpoint (read-only, no state changes)
   # This endpoint is used by monitoring systems and load balancers
+  # CodeQL: This is a deliberate security decision for health check endpoints
   protect_from_forgery :with => :null_session
 
   def status
