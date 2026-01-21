@@ -1,28 +1,19 @@
 GIT
-  remote: https://github.com/mattheworiordan/recursive-open-struct.git
-  revision: 8178fa5432584f0397cf545badf8a26b7f339ed5
-  specs:
-    recursive-open-struct (0.2.2)
-
-GIT
   remote: https://github.com/cwninja/rack-force_domain.git
   revision: b169af179fc3a8e1990cac18add093f30a654ed3
   specs:
     rack-force_domain (0.3.0)
 
+GIT
+  remote: https://github.com/mattheworiordan/recursive-open-struct.git
+  revision: 8178fa5432584f0397cf545badf8a26b7f339ed5
+  specs:
+    recursive-open-struct (0.2.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.2)
-    ably (0.8.7)
-      addressable (>= 2.0.0)
-      em-http-request (~> 1.1)
-      eventmachine (~> 1.0)
-      faraday (~> 0.9)
-      json
-      msgpack (>= 0.6.2)
-      statesman (~> 1.0.0)
-      websocket-driver (~> 0.3)
     actionmailer (3.2.22)
       actionpack (= 3.2.22)
       mail (~> 2.5.4)
@@ -66,7 +57,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.0.4)
-    byebug (8.2.1)
+    byebug (11.1.3)
     capybara (2.5.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -80,7 +71,7 @@ GEM
       timers (~> 1.1.0)
     chunky_png (1.3.5)
     cliver (0.3.2)
-    coderay (1.1.0)
+    coderay (1.1.3)
     compass (1.0.3)
       chunky_png (~> 1.2)
       compass-core (~> 1.0.2)
@@ -100,7 +91,6 @@ GEM
       sass-rails (< 5.1)
       sprockets (< 2.13)
     connection_pool (2.2.0)
-    cookiejar (0.3.0)
     cucumber (1.3.20)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.3)
@@ -132,14 +122,6 @@ GEM
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
     ejs (1.1.1)
-    em-http-request (1.1.3)
-      addressable (>= 2.3.4)
-      cookiejar (<= 0.3.0)
-      em-socksify (>= 0.3)
-      eventmachine (>= 1.0.3)
-      http_parser.rb (>= 0.6.0)
-    em-socksify (0.3.1)
-      eventmachine (>= 1.0.0.beta.4)
     email_spec (1.6.0)
       launchy (~> 2.1)
       mail (~> 2.2)
@@ -153,8 +135,6 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faraday (0.9.2)
-      multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     foreman (0.78.0)
       thor (~> 0.19.1)
@@ -165,17 +145,17 @@ GEM
     hashery (2.1.1)
     hike (1.2.3)
     hpricot (0.8.6)
-    http_parser.rb (0.6.0)
     httparty (0.13.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    io-console (0.8.2)
     journey (1.0.4)
     jquery-rails (2.1.3)
       railties (>= 3.1.0, < 5.0)
       thor (~> 0.14)
     jslint_on_rails (1.1.1)
-    json (1.8.1)
+    json (1.8.6)
     kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -186,15 +166,13 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    method_source (0.8.2)
+    method_source (1.1.0)
     mime-types (1.25.1)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
-    msgpack (0.7.4)
     multi_json (1.11.2)
     multi_test (0.1.2)
     multi_xml (0.5.5)
-    multipart-post (2.0.0)
     newrelic_rpm (3.14.1.311)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
@@ -217,12 +195,12 @@ GEM
     prawn (0.15.0)
       pdf-core (~> 0.1.3)
       ttfunk (~> 1.1.0)
-    pry (0.10.3)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
-    pry-byebug (3.3.0)
-      byebug (~> 8.0)
+    pry (0.16.0)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+      reline (>= 0.6.0)
+    pry-byebug (3.8.0)
+      byebug (~> 11.0)
       pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
@@ -267,6 +245,8 @@ GEM
     redis (3.2.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    reline (0.6.3)
+      io-console (~> 0.5)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
@@ -289,9 +269,6 @@ GEM
       sass (>= 3.1.10)
       tilt (~> 1.3)
     sexp_processor (4.6.0)
-    shortly (0.3.5)
-      httparty (= 0.13.0)
-      json (= 1.8.1)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
     sidekiq (2.17.8)
@@ -312,13 +289,11 @@ GEM
     slim (1.3.9)
       temple (~> 0.6.3)
       tilt (~> 1.3, >= 1.3.3)
-    slop (3.6.0)
     sprockets (2.2.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    statesman (1.0.0)
     temple (0.6.10)
     test-unit (3.1.5)
       power_assert
@@ -363,7 +338,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ably
   acts_as_list (~> 0.2.0)
   awesome_print
   better_errors
@@ -399,7 +373,7 @@ DEPENDENCIES
   poltergeist
   prawn (~> 0.12)
   pry
-  pry-byebug
+  pry-byebug (~> 3.7)
   pry-rails
   quiet_assets
   rack
@@ -411,7 +385,6 @@ DEPENDENCIES
   rspec-rails (~> 2.7.0)
   ruby_parser
   sass-rails
-  shortly
   shoulda-matchers
   sidekiq (~> 2.3)
   simplecov
@@ -428,4 +401,4 @@ DEPENDENCIES
   xml-object
 
 BUNDLED WITH
-   1.10.6
+   1.17.3

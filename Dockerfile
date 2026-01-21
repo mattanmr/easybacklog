@@ -1,5 +1,6 @@
 # Dockerfile
-FROM ruby:2.6-bullseye
+# Use Ruby 2.6 (bullseye) for better gem compatibility while keeping Rails 3.2 support
+FROM ruby:2.6.10-bullseye
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
@@ -17,8 +18,8 @@ WORKDIR /app
 # Copy .ruby-version first (needed by Gemfile)
 COPY .ruby-version ./
 
-# Copy Gemfile
-COPY Gemfile ./
+# Copy Gemfile and lockfile (prevents re-resolve on every build)
+COPY Gemfile Gemfile.lock ./
 
 # Configure git to use https instead of git protocol
 RUN git config --global url."https://".insteadOf git://
@@ -31,7 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt1-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
-RUN bundle install --no-deployment
+# Faster, cached install; keeps dev/test since we run them in container
+RUN bundle install --jobs=4 --retry=3 --no-deployment
 
 # Copy the rest of the application
 COPY . .
