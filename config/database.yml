@@ -4,13 +4,10 @@ default: &default
   encoding: unicode
   pool: 5
   timeout: 5000
-  <% if ENV['DATABASE_URL'] && !ENV['DATABASE_URL'].empty? %>
-  url: <%= ENV['DATABASE_URL'] %>
-  <% else %>
   username: <%= ENV['DB_USERNAME'] || 'postgres' %>
   password: <%= ENV['DB_PASSWORD'] || 'password' %>
-  host: <%= ENV['DB_HOST'] || 'localhost' %>
-  <% end %>
+  host: <%= ENV['DB_HOST'] || 'db' %>
+  port: <%= ENV['DB_PORT'] || '5432' %>
 
 development:
   <<: *default
