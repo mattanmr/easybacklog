@@ -16,7 +16,7 @@ class Account < ActiveRecord::Base
   before_validation :prohibit_rate_if_velocity_empty
   before_update :enable_defaults_set
 
-  scope :with_backlog_counts, select(sanitize_sql(['accounts.id, accounts.name, (select count(*) from backlogs where account_id = accounts.id and snapshot_master_id is null and snapshot_for_sprint_id is null and archived <> ? and deleted <> ?) as cnt', true, true]))
+  scope :with_backlog_counts, select(sanitize_sql(['accounts.id, accounts.name, (select count(*) from backlogs where account_id = accounts.id and snapshot_master_id is null and snapshot_for_sprint_id is null and archived <> ? and deleted <> ?) as cnt', connection.quoted_true, connection.quoted_true]))
 
   can_do :privileges => :account_users
 
