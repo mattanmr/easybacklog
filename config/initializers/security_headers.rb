@@ -19,12 +19,14 @@ Rails.application.config.action_dispatch.default_headers.merge!(
 )
 
 # Content Security Policy
+# NOTE: 'unsafe-inline' and 'unsafe-eval' are currently required for legacy Rails 3.2 compatibility
+# TODO: When upgrading Rails, implement nonce-based or hash-based CSP to remove these directives
 # This helps prevent XSS attacks by specifying which sources are allowed
 if Rails.env.production?
   Rails.application.config.action_dispatch.default_headers['Content-Security-Policy'] = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudfront.net",
-    "style-src 'self' 'unsafe-inline' *.cloudfront.net",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudfront.net",  # TODO: Remove unsafe-* with Rails upgrade
+    "style-src 'self' 'unsafe-inline' *.cloudfront.net",                  # TODO: Remove unsafe-inline with Rails upgrade
     "img-src 'self' data: *.cloudfront.net",
     "font-src 'self' *.cloudfront.net easybacklog.com",
     "connect-src 'self'",

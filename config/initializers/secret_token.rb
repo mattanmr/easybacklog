@@ -13,9 +13,11 @@ if secret.blank?
   if Rails.env.production?
     raise "SECRET_KEY_BASE environment variable must be set in production"
   else
-    # Fallback for development/test - should still be set in .env
-    warn "WARNING: SECRET_KEY_BASE not set. Using insecure fallback for #{Rails.env} environment"
-    secret = '1767515e3dcb83aa26da6392e1ecc039d327bb7f26c158321c486b4e0fe13a1f1d8629df5ad2be76ef72b08680674f63cb9d38d8bcc3e43b7f975afb0bb4fcec'
+    # Fallback for development/test - generate a random secret if not set
+    # IMPORTANT: This is only for development/test. Never use in production.
+    warn "WARNING: SECRET_KEY_BASE not set. Using randomly generated secret for #{Rails.env} environment"
+    warn "         Set SECRET_KEY_BASE in your .env file to suppress this warning"
+    secret = SecureRandom.hex(64)
   end
 end
 
