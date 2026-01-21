@@ -12,3 +12,16 @@
 ].each_with_index do |locale_data, index|
   Locale.create(locale_data.merge(:position => index + 1)) unless Locale.find_by_code(locale_data[:code])
 end
+
+# Ensure sprint story statuses exist (required during sample backlog creation)
+[
+  { :status => 'To do', :code => SprintStoryStatus::DEFAULT_CODE },
+  { :status => 'In progress', :code => SprintStoryStatus::IN_PROGRESS },
+  { :status => 'Completed', :code => SprintStoryStatus::COMPLETED },
+  { :status => 'Accepted', :code => SprintStoryStatus::ACCEPTED }
+].each_with_index do |status_data, index|
+  SprintStoryStatus.find_or_create_by_code(status_data[:code]) do |record|
+    record.status = status_data[:status]
+    record.position = index + 1
+  end
+end
