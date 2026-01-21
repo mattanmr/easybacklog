@@ -55,7 +55,7 @@ gem 'thin', group: :development
 gem 'test-unit', require: false
 
 # Ably is used for presence and realtime updates
-gem 'ably'
+# gem 'ably'  # Disabled for initial Docker testing
 
 group :assets do
   gem 'sass-rails'

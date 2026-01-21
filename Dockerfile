@@ -17,17 +17,21 @@ WORKDIR /app
 # Copy .ruby-version first (needed by Gemfile)
 COPY .ruby-version ./
 
-# Copy Gemfile and Gemfile.lock
-COPY Gemfile Gemfile.lock ./
+# Copy Gemfile
+COPY Gemfile ./
 
 # Configure git to use https instead of git protocol
 RUN git config --global url."https://".insteadOf git://
 
 # Install gems
 RUN gem install bundler -v 1.17.3
-# Pre-install json gem that's compatible with Ruby 2.6
-RUN gem install json -v 2.3.0
-RUN bundle install
+# Install build dependencies needed for native extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+RUN bundle install --no-deployment
 
 # Copy the rest of the application
 COPY . .

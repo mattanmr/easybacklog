@@ -1,19 +1,21 @@
 # config/database.yml
-development:
+default: &default
   adapter: postgresql
   encoding: unicode
-  database: easybacklog_development
   pool: 5
-  username: <%= ENV['DATABASE_URL'] ? '' : 'postgres' %>
-  password: <%= ENV['DATABASE_URL'] ? '' : 'password' %>
-  host: <%= ENV['DATABASE_URL'] ? '' : 'db' %>
+  timeout: 5000
+  <% if ENV['DATABASE_URL'] && !ENV['DATABASE_URL'].empty? %>
   url: <%= ENV['DATABASE_URL'] %>
+  <% else %>
+  username: <%= ENV['DB_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DB_PASSWORD'] || 'password' %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  <% end %>
+
+development:
+  <<: *default
+  database: easybacklog_development
 
 test:
-  adapter: postgresql
-  encoding: unicode
+  <<: *default
   database: easybacklog_test
-  pool: 5
-  username: postgres
-  password: password
-  host: db

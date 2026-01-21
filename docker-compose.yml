@@ -31,6 +31,8 @@ services:
 
   web:
     build: .
+    env_file:
+      - .env
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
     volumes:
       - .:/app
@@ -51,6 +53,8 @@ services:
 
   sidekiq:
     build: .
+    env_file:
+      - .env
     command: bundle exec sidekiq
     volumes:
       - .:/app
