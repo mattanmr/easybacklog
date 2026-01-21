@@ -1,7 +1,8 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Load Ruby Version into Gemfile for use with Heroku, but strip patch version as not allowed with Heroku
-ruby File.read(File.expand_path("../.ruby-version", __FILE__)).strip.gsub(/\-p\d+$/, '')
+# ruby File.read(File.expand_path("../.ruby-version", __FILE__)).strip.gsub(/\-p\d+$/, '')
+# NOTE: Ruby version is managed by Docker image (ruby:2.6.10-bullseye)
 
 gem 'rails', '~> 3.2.18'
 gem 'pg'
@@ -10,6 +11,11 @@ gem 'jquery-rails', '~> 2.1.3'
 gem 'haml'
 # support for JST templates in sprockets
 gem 'ejs'
+
+# Modern overrides for legacy stack
+gem 'json', '~> 1.8.6'
+
+
 
 # authentication
 gem 'devise', '~> 2.1.2'
@@ -29,7 +35,7 @@ gem 'newrelic_rpm'
 gem 'rack'
 gem 'rack-force_domain', :git => 'https://github.com/cwninja/rack-force_domain.git'
 
-gem 'shortly' # shorten URLs using an external service such as bit.ly
+# gem 'shortly' # shorten URLs using an external service such as bit.ly (disabled for Docker/Ruby compatibility)
 
 gem 'will_paginate'
 
@@ -54,7 +60,7 @@ gem 'thin', group: :development
 gem 'test-unit', require: false
 
 # Ably is used for presence and realtime updates
-gem 'ably'
+# gem 'ably'  # Disabled for initial Docker testing
 
 group :assets do
   gem 'sass-rails'
@@ -71,7 +77,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'pry'
   gem 'pry-rails'
-  gem 'pry-byebug'
+  gem 'pry-byebug', '~> 3.7'
   gem 'better_errors'
   gem 'binding_of_caller' # REPL for better errors
 end
@@ -98,7 +104,7 @@ group :test do
   gem 'email_spec'
   gem 'eventmachine', '~> 1.0.4'
   gem 'capybara-screenshot'
-  gem 'recursive-open-struct', :git => 'git://github.com/mattheworiordan/recursive-open-struct.git'
+  gem 'recursive-open-struct', :git => 'https://github.com/mattheworiordan/recursive-open-struct.git'
 end
 
 group :development do
