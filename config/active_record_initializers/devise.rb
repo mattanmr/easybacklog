@@ -37,13 +37,14 @@ Devise.setup do |config|
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
   # using other encryptors, it sets how many times you want the password re-encrypted.
-  config.stretches = 10
+  config.stretches = Rails.env.test? ? 1 : 10
 
   # Define which will be the encryption algorithm. Devise also supports encryptors
   # from others authentication tools as :clearance_sha1, :authlogic_sha512 (then
   # you should set stretches above to 20 for default behavior) and :restful_authentication_sha1
   # (then you should set stretches to 10, and copy REST_AUTH_SITE_KEY to pepper)
-  config.encryptor = :bcrypt
+  # NOTE: :bcrypt is the default encryptor for Devise 2.x and should not be set explicitly
+  # config.encryptor = :bcrypt # DISABLED - causes "invalid hash" error with bcrypt 3.1.10+
 
   # Setup a pepper to generate the encrypted password.
   config.pepper = "5716e922a4cc55556e1f0ae066dfac3c114c3ccd71e34fc343430703890d48a37fb2b656a195436dafe7761c4a0ba32ebc02d8699976f925149b52ce311c41f6"
