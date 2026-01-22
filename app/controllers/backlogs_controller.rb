@@ -485,7 +485,9 @@ class BacklogsController < ApplicationController
 
     def set_locale
       # only localise to the language, ignore the country
-      I18n.locale = @backlog.locale.code.split('-').first.to_sym
+      # Normalize locale code: en_US -> en-US, then split to get just 'en'
+      normalized_code = @backlog.locale.code.to_s.gsub('_', '-')
+      I18n.locale = normalized_code.split('-').first.to_sym
     end
 
     def enforce_can(rights, message)
