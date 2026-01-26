@@ -1,8 +1,15 @@
 module BacklogsHelper
   def backlog_date(backlog)
     # Normalize locale code: en_US -> en-US, then use just the language part (en)
-    normalized_code = backlog.locale.code.to_s.gsub('_', '-')
-    language_code = normalized_code.split('-').first.to_sym
+    if backlog.locale && backlog.locale.code.present?
+      normalized_code = backlog.locale.code.to_s.gsub('_', '-')
+      language_code = normalized_code.split('-').first.to_sym
+    elsif backlog.account && backlog.account.locale && backlog.account.locale.code.present?
+      normalized_code = backlog.account.locale.code.to_s.gsub('_', '-')
+      language_code = normalized_code.split('-').first.to_sym
+    else
+      language_code = :en
+    end
     I18n.l backlog.updated_at, :format => :short, :locale => language_code
   end
 

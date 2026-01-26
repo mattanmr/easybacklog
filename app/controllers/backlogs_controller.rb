@@ -486,8 +486,17 @@ class BacklogsController < ApplicationController
     def set_locale
       # only localise to the language, ignore the country
       # Normalize locale code: en_US -> en-US, then split to get just 'en'
-      normalized_code = @backlog.locale.code.to_s.gsub('_', '-')
-      I18n.locale = normalized_code.split('-').first.to_sym
+      if @backlog.locale && @backlog.locale.code.present?
+        normalized_code = @backlog.locale.code.to_s.gsub('_', '-')
+        I18n.locale = normalized_code.split('-').first.to_sym
+      elsif @backlog.account && @backlog.account.locale && @backlog.account.locale.code.present?
+        # Fall back to account locale if backlog locale is not set
+        normalized_code = @backlog.account.locale.code.to_s.gsub('_', '-')
+        I18n.locale = normalized_code.split('-').first.to_sym
+      else
+        # Default to English if no locale is set
+        I18n.locale = :en
+      end
     end
 
     def enforce_can(rights, message)
