@@ -95,11 +95,28 @@ class Backlog < ActiveRecord::Base
   end
 
   def cost_formatted
-    (cost || 0).to_currency(:precision => 0, :locale => locale.code.to_s)
+    (cost || 0).to_currency(:precision => 0, :locale => normalized_locale_string)
   end
 
   def rate_formatted
-    (rate || 0).to_currency(:precision => 0, :locale => locale.code.to_s)
+    (rate || 0).to_currency(:precision => 0, :locale => normalized_locale_string)
+  end
+
+  def normalized_locale_symbol
+    code = if locale && locale.code.present?
+      locale.code
+    elsif account && account.locale && account.locale.code.present?
+      account.locale.code
+    else
+      :en
+    end
+
+    normalized = code.to_s.gsub('_', '-').split('-').first.to_sym
+    I18n.available_locales.include?(normalized) ? normalized : :en
+  end
+
+  def normalized_locale_string
+    normalized_locale_symbol.to_s
   end
 
   def days_formatted

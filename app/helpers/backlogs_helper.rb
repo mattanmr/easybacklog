@@ -1,20 +1,7 @@
 module BacklogsHelper
   def backlog_date(backlog)
-    # Normalize locale code: en_US -> en-US, then use just the language part (en)
-    if backlog.locale && backlog.locale.code.present?
-      normalized_code = backlog.locale.code.to_s.gsub('_', '-')
-      language_code = normalized_code.split('-').first.to_sym
-    elsif backlog.account && backlog.account.locale && backlog.account.locale.code.present?
-      normalized_code = backlog.account.locale.code.to_s.gsub('_', '-')
-      language_code = normalized_code.split('-').first.to_sym
-    else
-      language_code = :en
-    end
-    
-    # Ensure the locale is available in I18n, fallback to :en if not
-    language_code = :en unless I18n.available_locales.include?(language_code)
-    
-    I18n.l backlog.updated_at, :format => :short, :locale => language_code
+    # Use normalized locale symbol from backlog to ensure valid locale is used
+    I18n.l backlog.updated_at, :format => :short, :locale => backlog.normalized_locale_symbol
   end
 
   # if JSON is embedded in CDATA Javascript and there is a value of </script> it closes the opening <script> tag incorrectly

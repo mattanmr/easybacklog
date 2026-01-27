@@ -13,6 +13,19 @@
   Locale.create(locale_data.merge(:position => index + 1)) unless Locale.find_by_code(locale_data[:code])
 end
 
+# Create scoring rules if missing
+[
+  { :code => ScoringRule::FIBONACCI,     :title => 'Fibonacci',          :description => '0, 0.5, 1, 2, 3, 5, 8, 13, 21, 34',           :position => 1 },
+  { :code => ScoringRule::MODIFIED_FIB,  :title => 'Modified Fibonacci', :description => '0, 0.5, 1, 2, 3, 5, 8, 13, 20, 21, 40, 60, 100', :position => 2 },
+  { :code => ScoringRule::ANY,           :title => 'Any',                :description => 'Any non-negative score',                          :position => 3 }
+].each do |rule|
+  ScoringRule.find_or_create_by_code(rule[:code]) do |record|
+    record.title = rule[:title]
+    record.description = rule[:description]
+    record.position = rule[:position]
+  end
+end
+
 # Ensure sprint story statuses exist (required during sample backlog creation)
 [
   { :status => 'To do', :code => SprintStoryStatus::DEFAULT_CODE },
