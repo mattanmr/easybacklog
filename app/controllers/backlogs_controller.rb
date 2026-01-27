@@ -377,7 +377,15 @@ class BacklogsController < ApplicationController
   helper_method :sprints_json
 
   def current_locale_code
-    @backlog.locale.code
+    # Normalize and validate locale code for use in views
+    if @backlog && @backlog.locale && @backlog.locale.code.present?
+      normalized_code = @backlog.locale.code.to_s.gsub('_', '-')
+      language_code = normalized_code.split('-').first
+      # Return the normalized code (e.g., 'en' instead of 'en_US')
+      I18n.available_locales.include?(language_code.to_sym) ? language_code : 'en'
+    else
+      'en'
+    end
   end
   helper_method :current_locale_code
 
@@ -487,16 +495,17 @@ class BacklogsController < ApplicationController
       # only localise to the language, ignore the country
       # Normalize locale code: en_US -> en-US, then split to get just 'en'
       if @backlog.locale && @backlog.locale.code.present?
-        normalized_code = @backlog.locale.code.to_s.gsub('_', '-')
-        I18n.locale = normalized_code.split('-').first.to_sym
+        locale_code = @backlog.locale.code.to_s.gsub('_', '-').split('-').first.to_sym
       elsif @backlog.account && @backlog.account.locale && @backlog.account.locale.code.present?
         # Fall back to account locale if backlog locale is not set
-        normalized_code = @backlog.account.locale.code.to_s.gsub('_', '-')
-        I18n.locale = normalized_code.split('-').first.to_sym
+        locale_code = @backlog.account.locale.code.to_s.gsub('_', '-').split('-').first.to_sym
       else
         # Default to English if no locale is set
-        I18n.locale = :en
+        locale_code = :en
       end
+      
+      # Ensure the locale is available in I18n, fallback to :en if not
+      I18n.locale = I18n.available_locales.include?(locale_code) ? locale_code : :en
     end
 
     def enforce_can(rights, message)

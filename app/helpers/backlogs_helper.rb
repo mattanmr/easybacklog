@@ -10,6 +10,10 @@ module BacklogsHelper
     else
       language_code = :en
     end
+    
+    # Ensure the locale is available in I18n, fallback to :en if not
+    language_code = :en unless I18n.available_locales.include?(language_code)
+    
     I18n.l backlog.updated_at, :format => :short, :locale => language_code
   end
 
