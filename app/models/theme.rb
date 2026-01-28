@@ -13,7 +13,7 @@ class Theme < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:backlog_id]
   validates_presence_of :name
   validates_uniqueness_of :code, :scope => [:backlog_id]
-  validates_format_of :code, :with => /^[A-Z0-9a-z]{3}$/, :message => 'must be 3 alphanumeric characters', :unless => Proc.new { |user| user.code.blank? }
+  validates_format_of :code, :with => /\A[A-Z0-9a-z]{3}\z/, :message => 'must be 3 alphanumeric characters', :unless => Proc.new { |user| user.code.blank? }
 
   before_save :assign_code_if_blank
 

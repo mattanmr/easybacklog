@@ -1,10 +1,43 @@
+# Version control
 .git
 .gitignore
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Temporary files
 tmp/*
 log/*
 *.log
-.env
-.env.*
+
+# Dependencies
 node_modules/
+
+# Test and coverage
 coverage/
+spec/
+features/
+test/
+
+# Documentation (can be removed from production image)
+*.md
+doc/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CI/CD
+.github/
+
+# Security reports
+brakeman-report.json

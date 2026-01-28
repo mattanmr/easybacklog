@@ -5,6 +5,9 @@ class CompanyUser < ActiveRecord::Base
 
   include PrivilegeProperty
 
+  # Mass assignment protection - privilege code is managed via PrivilegeProperty
+  attr_accessible :privilege
+
   def admin?
     company.account.account_users.find_by_user_id(user_id).admin?
   end

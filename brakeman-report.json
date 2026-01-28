@@ -1,0 +1,922 @@
+{
+  "scan_info": {
+    "app_path": "/app",
+    "rails_version": "3.2.22",
+    "security_warnings": 35,
+    "start_time": "2026-01-21 18:31:26 +0000",
+    "end_time": "2026-01-21 18:31:28 +0000",
+    "duration": 2.633367613,
+    "checks_performed": [
+      "BasicAuth",
+      "BasicAuthTimingAttack",
+      "CSRFTokenForgeryCVE",
+      "ContentTag",
+      "CookieSerialization",
+      "CreateWith",
+      "CrossSiteScripting",
+      "DefaultRoutes",
+      "Deserialize",
+      "DetailedExceptions",
+      "DigestDoS",
+      "DynamicFinders",
+      "EOLRails",
+      "EOLRuby",
+      "EscapeFunction",
+      "Evaluation",
+      "Execute",
+      "FileAccess",
+      "FileDisclosure",
+      "FilterSkipping",
+      "ForgerySetting",
+      "HeaderDoS",
+      "I18nXSS",
+      "JRubyXML",
+      "JSONEncoding",
+      "JSONEntityEscape",
+      "JSONParsing",
+      "LinkTo",
+      "LinkToHref",
+      "MailTo",
+      "MassAssignment",
+      "MimeTypeDoS",
+      "ModelAttrAccessible",
+      "ModelAttributes",
+      "ModelSerialize",
+      "NestedAttributes",
+      "NestedAttributesBypass",
+      "NumberToCurrency",
+      "PageCachingCVE",
+      "Pathname",
+      "PermitAttributes",
+      "QuoteTableName",
+      "Redirect",
+      "RegexDoS",
+      "Render",
+      "RenderDoS",
+      "RenderInline",
+      "ResponseSplitting",
+      "RouteDoS",
+      "SQL",
+      "SQLCVEs",
+      "SSLVerify",
+      "SafeBufferManipulation",
+      "SanitizeConfigCve",
+      "SanitizeMethods",
+      "SelectTag",
+      "SelectVulnerability",
+      "Send",
+      "SendFile",
+      "SessionManipulation",
+      "SessionSettings",
+      "SimpleFormat",
+      "SingleQuotes",
+      "SkipBeforeFilter",
+      "SprocketsPathTraversal",
+      "StripTags",
+      "SymbolDoSCVE",
+      "TemplateInjection",
+      "TranslateBug",
+      "UnsafeReflection",
+      "UnsafeReflectionMethods",
+      "ValidationRegex",
+      "VerbConfusion",
+      "WeakRSAKey",
+      "WithoutProtection",
+      "XMLDoS",
+      "YAMLParsing"
+    ],
+    "number_of_controllers": 28,
+    "number_of_models": 25,
+    "number_of_templates": 70,
+    "ruby_version": "2.6.10",
+    "brakeman_version": "5.4.1"
+  },
+  "warnings": [
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "02aeac6ea4a2e33b81b5b81782d317a064db9d93f22204fdda9784d2a5222290",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/sprint_story_status.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "SprintStoryStatus"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "0b02108bb3a35838ef0f8eb06349163246815c20b65ba16abb9ae144eb961cb8",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/story.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":unique_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Story"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "19cd816147f09c4149cce031adeda5d8cd248b216a6fa30542e91889f91f7285",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/company.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":locale_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Company"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "1dc8ccc17f563a296c901ae465357a8bf51aae1262175b2049a54f77e5c718e5",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/account.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":scoring_rule_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Account"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Format Validation",
+      "warning_code": 30,
+      "fingerprint": "231781284a981a1857c1640c9686c23aae59448d631db653a796a35737e59dfc",
+      "check_name": "ValidationRegex",
+      "message": "Insufficient validation for `email` using `/^([^\\s]+)((?:[-a-z0-9]\\.)[a-z]{2,})$/i`. Use `\\A` and `\\z` as anchors",
+      "file": "app/models/beta_signup.rb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/format_validation/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "BetaSignup"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        777
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "2fd23fec08122244bd11ac1765240cb219a03a3e40444b31fbbf33773072a783",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/sprint_story.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":sprint_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "SprintStory"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 102,
+      "fingerprint": "331e69e4654f158601d9a0e124304f825da4e0156d2c94759eb02611e280feaa",
+      "check_name": "ContentTag",
+      "message": "Rails 3.2.22 `content_tag` does not escape double quotes in attribute values (CVE-2016-6316). Upgrade to Rails 3.2.22.4",
+      "file": "Gemfile.lock",
+      "line": 214,
+      "link": "https://groups.google.com/d/msg/ruby-security-ann/8B2iV2tPRSE/JkjCJkSoCgAJ",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "367ee22f60c58dc9299430a4f742946715d076be891cab66edc008582af4fae4",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/backlogs/edit.html.haml",
+      "line": 125,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "embedded_json_safe(sprints_json(Backlog.available.where(:account_id => current_account.id).find(params[:id])))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BacklogsController",
+          "method": "edit",
+          "line": 89,
+          "file": "app/controllers/backlogs_controller.rb",
+          "rendered": {
+            "name": "backlogs/edit",
+            "file": "app/views/backlogs/edit.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "backlogs/edit"
+      },
+      "user_input": "Backlog.available.where(:account_id => current_account.id)",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "3ccb0ad344fb83043dc75be008a539ec9d67beb3053169f9891709cdb8351f47",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/company_users/index.html.haml",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "privilege_options(account_user, current_account.companies.find(params[:company_id]).company_users.index_by(&:user_id), \"this company\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "CompanyUsersController",
+          "method": "index",
+          "line": 11,
+          "file": "app/controllers/company_users_controller.rb",
+          "rendered": {
+            "name": "company_users/index",
+            "file": "app/views/company_users/index.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "company_users/index"
+      },
+      "user_input": "params[:company_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Request Forgery",
+      "warning_code": 7,
+      "fingerprint": "3f326a833a1f7941dece5e6e9bfbad414891b2f3d460b2d4f3c8323fed9bb46c",
+      "check_name": "ForgerySetting",
+      "message": "`protect_from_forgery` should be called in `ApiController`",
+      "file": "app/controllers/api_controller.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_request_forgery/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "controller",
+        "controller": "ApiController"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        352
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "44468a2a29b8bc9ef885547807deb5fde0a20b2c8275d91937e56b608ff7a855",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/account.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":locale_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Account"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "50b8a4fe27e635b2c9940fba6b854ab474753fa008d13771d368e9e634aa14d3",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/backlogs/show.html.haml",
+      "line": 152,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "current_user.accounts.map do\n \"'#{escape_javascript(a.name)}'\"\n end.join(\",\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BacklogsController",
+          "method": "render_backlog_or_snapshot",
+          "line": 414,
+          "file": "app/controllers/backlogs_controller.rb",
+          "rendered": {
+            "name": "backlogs/show",
+            "file": "app/views/backlogs/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "backlogs/show"
+      },
+      "user_input": "current_user.accounts.map",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "533d4d77be893b7633ab9722a9ba1c196ee61143811ecdf415bc9818adb2c4a0",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/backlog.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":scoring_rule_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Backlog"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "56ad51926a9bf93a4b948e2b83ddcbef6c9d04f58bdf61ccac0867fab798ba42",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/backlogs/edit.html.haml",
+      "line": 123,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Backlog.available.where(:account_id => current_account.id).find(params[:id]).velocity",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BacklogsController",
+          "method": "edit",
+          "line": 89,
+          "file": "app/controllers/backlogs_controller.rb",
+          "rendered": {
+            "name": "backlogs/edit",
+            "file": "app/views/backlogs/edit.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "backlogs/edit"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Denial of Service",
+      "warning_code": 94,
+      "fingerprint": "5945a9b096557ee5771c2dd12ea6cbec933b662d169e559f524ba01c44bf2452",
+      "check_name": "MimeTypeDoS",
+      "message": "Rails 3.2.22 is vulnerable to denial of service via mime type caching (CVE-2016-0751). Upgrade to Rails 3.2.22.1",
+      "file": "Gemfile.lock",
+      "line": 214,
+      "link": "https://groups.google.com/d/msg/rubyonrails-security/9oLY_FCzvoc/w9oI9XxbFQAJ",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        399
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "71401a24c74269e648e009b9b00069f953d6556aa8b04f8fbdb2baccca4d6696",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/account_user.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "AccountUser"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Session Setting",
+      "warning_code": 29,
+      "fingerprint": "715ad9c0d76f57a6a657192574d528b620176a80fec969e2f63c88eacab0b984",
+      "check_name": "SessionSettings",
+      "message": "Session secret should not be included in version control",
+      "file": "config/initializers/secret_token.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/session_setting/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        798
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 5,
+      "fingerprint": "8097fd7c2fbf75b382ed9dcf31a9c4f1f6f6934e20ea0e36b888155dbae60ce6",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute in JSON hash",
+      "file": "app/views/user_tokens/index.html.haml",
+      "line": 26,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting_to_json",
+      "code": "current_user.user_tokens.to_json",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "UserTokensController",
+          "method": "index",
+          "line": 6,
+          "file": "app/controllers/user_tokens_controller.rb",
+          "rendered": {
+            "name": "user_tokens/index",
+            "file": "app/views/user_tokens/index.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "user_tokens/index"
+      },
+      "user_input": "current_user.user_tokens.to_json",
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "8dcf44755e7449689d7ffb445cf40026663e9db4ad76a6108913695f904d4e99",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/locale.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Locale"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 53,
+      "fingerprint": "93df6b8836293909e8405f107615e8e6e1971e23e2fe87cec5c8e4b38a050354",
+      "check_name": "ContentTag",
+      "message": "Unescaped model attribute in `content_tag`",
+      "file": "app/helpers/privileges_helper.rb",
+      "line": 27,
+      "link": "https://brakemanscanner.org/docs/warning_types/content_tag",
+      "code": "content_tag(:optgroup, raw(Privilege.all.map do\n content_tag(:option, \"#{priv.description} to #{context}\", privilege_options_attributes(priv.to_s, ((account_user.privilege.code or explicit_privilege[account_user.user_id].privilege.code) or nil)))\n end.join(\"\")), :label => (\"Explicit permissions for #{context}\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PrivilegesHelper",
+        "method": "privilege_options"
+      },
+      "user_input": "Privilege.all.map",
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "93f2a2631710711297d31838e24c8c50ec48ceaa11663352f867ff2d8cb42a31",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/sprint_story.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":sprint_story_status_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "SprintStory"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "a5e7df513eb0ad99efe783632df83f936e28c2c5aef6e650dd11024e25ae1e3f",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/invited_user.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":invitee_user_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "InvitedUser"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Format Validation",
+      "warning_code": 30,
+      "fingerprint": "a6901b4728b4f579426bf3317bd5c02703f46c5fff928187460c76c71e046343",
+      "check_name": "ValidationRegex",
+      "message": "Insufficient validation for `code` using `/^[A-Z0-9a-z]{3}$/`. Use `\\A` and `\\z` as anchors",
+      "file": "app/models/theme.rb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/format_validation/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Theme"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        777
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "b5f9992231b360c5ea22b0a88bdd2a548dbc63fe5fe6935a516d8fb0cd6a41e6",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/backlog.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":locale_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "Backlog"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "bd3283c52a812bce7451de2f333bf9170bcced32291e030cde4ddf69afef31f1",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/backlog_users/index.html.haml",
+      "line": 41,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "privilege_options(account_user, current_account.backlogs.find(params[:backlog_id]).backlog_users.index_by(&:user_id), \"this backlog\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BacklogUsersController",
+          "method": "index",
+          "line": 14,
+          "file": "app/controllers/backlog_users_controller.rb",
+          "rendered": {
+            "name": "backlog_users/index",
+            "file": "app/views/backlog_users/index.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "backlog_users/index"
+      },
+      "user_input": "params[:backlog_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c5440a2d2dc178679553528da56321bd46d038818551ca7b052670f4a6342b36",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/backlogs/show.html.haml",
+      "line": 141,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "embedded_json_safe(backlog_json(current_account.backlogs.available.find(params[:id], :include => ([{ :themes => ({ :stories => :acceptance_criteria }) }, { :sprints => ({ :sprint_stories => ([:story, :sprint_story_status]) }) }]))))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BacklogsController",
+          "method": "show",
+          "line": 26,
+          "file": "app/controllers/backlogs_controller.rb",
+          "rendered": {
+            "name": "backlogs/show",
+            "file": "app/views/backlogs/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "backlogs/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Request Forgery",
+      "warning_code": 116,
+      "fingerprint": "c8697fda60549ca065789e2ea74c94effecef88b2b5483bae17ddd62ece47194",
+      "check_name": "CSRFTokenForgeryCVE",
+      "message": "Rails 3.2.22 has a vulnerability that may allow CSRF token forgery. Upgrade to Rails 5.2.4.3 or patch",
+      "file": "Gemfile.lock",
+      "line": 214,
+      "link": "https://groups.google.com/g/rubyonrails-security/c/NOjKiGeXUgw",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        352
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "cc93b76402491077e2cebdc0810d04e9409205e7560ec5d452848ce067242e51",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/company_user.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "CompanyUser"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "cfc4688bd43b8672e3b424f490212bc1873a833764606a4d3970b728a7af7bf8",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/cron_log.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "CronLog"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 3.2.22 ended on 2016-06-30",
+      "file": "Gemfile.lock",
+      "line": 214,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "df7b5c36b913f5a5fbfbe9ba9c3b1b672496e4bcbf6b2df35465a8204459ce68",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/backlog_user.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "BacklogUser"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 60,
+      "fingerprint": "e35731597590cccdada3678e8485e51e1beda31d7ffe182104a5ea67686c7d04",
+      "check_name": "ModelAttrAccessible",
+      "message": "Potentially dangerous attribute available for mass assignment",
+      "file": "app/models/sprint_story.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": ":story_id",
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "SprintStory"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 121,
+      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 2.6.10 ended on 2022-03-31",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Request Forgery",
+      "warning_code": 7,
+      "fingerprint": "f0e76e29625805e9de4f98eb898dfd9b9b4f0a787a1609a7e266fc7a5dce509b",
+      "check_name": "ForgerySetting",
+      "message": "`protect_from_forgery` should be called in `HealthController`",
+      "file": "app/controllers/health_controller.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_request_forgery/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "controller",
+        "controller": "HealthController"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        352
+      ]
+    },
+    {
+      "warning_type": "Attribute Restriction",
+      "warning_code": 19,
+      "fingerprint": "fd0c65de9641614eb97d1a3abea4453f2353a21f38a45ab211037df50585f5e1",
+      "check_name": "ModelAttributes",
+      "message": "Mass assignment is not restricted using `attr_accessible`",
+      "file": "app/models/scoring_rule.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/attribute_restriction/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "model",
+        "model": "ScoringRule"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    }
+  ],
+  "ignored_warnings": [
+
+  ],
+  "errors": [
+    {
+      "error": "Illegal element: classes and ids must have values.",
+      "location": "While compiling HAML in /app/app/views/layouts/api.html.haml"
+    },
+    {
+      "error": "Illegal element: classes and ids must have values.",
+      "location": "While compiling HAML in /app/app/views/layouts/application.960.html.haml"
+    },
+    {
+      "error": "Illegal element: classes and ids must have values.",
+      "location": "While compiling HAML in /app/app/views/layouts/application.html.haml"
+    },
+    {
+      "error": "Illegal element: classes and ids must have values.",
+      "location": "While compiling HAML in /app/app/views/layouts/backlog.html.haml"
+    }
+  ],
+  "obsolete": [
+
+  ]
+}
