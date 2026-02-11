@@ -16,7 +16,12 @@ class ScoringRule < ActiveRecord::Base
   validates_uniqueness_of :description, :code, :title
 
   def self.default
-    ScoringRule.find_by_code('M')
+    ScoringRule.find_by_code(MODIFIED_FIB) || ScoringRule.create!(
+      :code => MODIFIED_FIB,
+      :title => 'Modified Fibonacci',
+      :description => '0, 0.5, 1, 2, 3, 5, 8, 13, 20, 21, 40, 60, 100',
+      :position => 2
+    )
   end
 
   def is_score_valid?(score)

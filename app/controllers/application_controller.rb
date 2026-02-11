@@ -314,7 +314,12 @@ class ApplicationController < ActionController::Base
       else
         if is_api?
           send_error "An internal server error has occured: #{e.message}", :http_status => :internal_server_error
-          Exceptional.handle(e, 'Error caught by API and handled gracefully')
+          # Send to external error tracking only if enabled
+          if ExternalServices.error_tracking_enabled?
+            Exceptional.handle(e, 'Error caught by API and handled gracefully')
+          else
+            Rails.logger.error "API Error (error tracking disabled): #{e.class} - #{e.message}\n#{e.backtrace.join("\n")}"
+          end
         else
           raise e
         end

@@ -157,9 +157,12 @@
   %p
     We're always open to suggestions, and we love to hear from users of easyBacklog to hear about how you use the product and what you need from it moving forwards.
   %p
-    We have a very active
-    =link_to 'support forum and knowledgebase', 'http://easybacklog.userecho.com/'
-    where we'd love to hear your suggestions.
+    - if ExternalServices.feedback_enabled?
+      We have a very active
+      =link_to 'support forum and knowledgebase', 'http://easybacklog.userecho.com/'
+      where we'd love to hear your suggestions.
+    - else
+      We have a support forum and knowledgebase (external feedback service currently disabled for local development).
 
   %h3
     %a{:name => 'problem'}

@@ -1,6 +1,7 @@
 module BacklogsHelper
   def backlog_date(backlog)
-    I18n.l backlog.updated_at, :format => :short, :locale => backlog.locale.code.to_sym
+    # Use normalized locale symbol from backlog to ensure valid locale is used
+    I18n.l backlog.updated_at, :format => :short, :locale => backlog.normalized_locale_symbol
   end
 
   # if JSON is embedded in CDATA Javascript and there is a value of </script> it closes the opening <script> tag incorrectly

@@ -18,6 +18,14 @@ class PagesController < ApplicationController
   end
 
   def realtime_token
+    # Real-time features disabled by default for local development
+    # To enable: Set ENABLE_REALTIME=true or ENABLE_EXTERNAL_SERVICES=true
+    unless ExternalServices.realtime_enabled?
+      return render status: :service_unavailable, json: { 
+        error: "Real-time features are disabled. Set ENABLE_REALTIME=true to enable." 
+      }
+    end
+
     raise "Ably API key is missing, set env var ABLY_API_KEY" unless ENV['ABLY_API_KEY']
     unless current_user
       return render status: :unauthorized, json: { error: "A realtime token cannot be issued unless you are logged in, please log in first" }
@@ -30,5 +38,13 @@ class PagesController < ApplicationController
   # /raise-error for testing error capture
   def raise_error
     raise "Intentional error thrown"
+  end
+
+  def contact
+    # Auto-renders: app/views/pages/contact.html.haml
+  end
+
+  def faq
+    # Auto-renders: app/views/pages/faq.html.haml
   end
 end

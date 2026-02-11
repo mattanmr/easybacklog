@@ -1,16 +1,18 @@
--# show user echo code unless in test environment
-:javascript
-  if (!window.App || (App.environment !== 'test')) {
-    _ues = {
-      host:'easybacklog.userecho.com',
-      forum:'4890',
-      lang:'en',
-      tab_show:false
-    };
+-# UserEcho Feedback Widget - disabled by default for local development
+-# To enable: Set ENABLE_FEEDBACK=true or ENABLE_EXTERNAL_SERVICES=true
+- if ExternalServices.feedback_enabled?
+  :javascript
+    if (!window.App || (App.environment !== 'test')) {
+      _ues = {
+        host:'easybacklog.userecho.com',
+        forum:'4890',
+        lang:'en',
+        tab_show:false
+      };
 
-    (function() {
-      var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
-      _ue.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
-    })();
-  }
+      (function() {
+        var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+        _ue.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+      })();
+    }

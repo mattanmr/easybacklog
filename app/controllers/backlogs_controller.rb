@@ -377,7 +377,8 @@ class BacklogsController < ApplicationController
   helper_method :sprints_json
 
   def current_locale_code
-    @backlog.locale.code
+    # Use normalized locale string for view helpers and JS
+    @backlog.normalized_locale_string
   end
   helper_method :current_locale_code
 
@@ -485,7 +486,7 @@ class BacklogsController < ApplicationController
 
     def set_locale
       # only localise to the language, ignore the country
-      I18n.locale = @backlog.locale.code.split('-').first.to_sym
+      I18n.locale = @backlog.normalized_locale_symbol
     end
 
     def enforce_can(rights, message)

@@ -3,9 +3,12 @@
 
 %h2 Support and Knowledgebase
 %p
-  If you have any suggestions, feedback or are experiencing any problems,
-  %a{ :href => 'http://easybacklog.userecho.com/' }
-    please let us know on our support forum and knowledgebase.
+  - if ExternalServices.feedback_enabled?
+    If you have any suggestions, feedback or are experiencing any problems,
+    %a{ :href => 'http://easybacklog.userecho.com/' }
+      please let us know on our support forum and knowledgebase.
+  - else
+    Support forum and knowledgebase (external feedback service currently disabled for local development).
 
 %p
   You can view easyBacklog's uptime on the
