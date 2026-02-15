@@ -34,6 +34,17 @@ warning() {
     echo -e "${YELLOW}⚠${NC} $1"
 }
 
+# Function to check HTTP status
+check_http_status() {
+    local url=$1
+    local expected=$2
+    if curl -s -o /dev/null -w "%{http_code}" "$url" | grep -q "$expected"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Check if Docker is running
 echo "Checking Docker..."
 if ! docker info > /dev/null 2>&1; then
@@ -99,13 +110,13 @@ echo ""
 
 # Check web server
 echo "Checking web server..."
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200"; then
+if check_http_status "http://localhost:3000" "200"; then
     success "Web server is responding (HTTP 200)"
     success "Application is accessible at http://localhost:3000"
 else
     warning "Web server returned non-200 status. Checking if it's starting up..."
     sleep 3
-    if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200"; then
+    if check_http_status "http://localhost:3000" "200"; then
         success "Web server is now responding"
     else
         error "Web server is not responding correctly"
