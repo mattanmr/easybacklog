@@ -93,3 +93,81 @@ easyBacklog is built on [Ruby on Rails](https://rubyonrails.org/) and has not be
 - Multi-tenant SaaS patterns
 - Authentication and authorization
 - API design
+
+---
+
+# For Students: Where to Start
+
+This repository is fully dockerized and ready for experimentation. Here's your learning path:
+
+## 📚 Documentation
+
+Start with these guides in order:
+
+1. **[GETTING_STARTED.md](doc/GETTING_STARTED.md)** - Complete beginner's guide with learning paths
+2. **[DOCKER_GUIDE.md](doc/DOCKER_GUIDE.md)** - Comprehensive Docker operations reference
+3. **[LOCAL_DEVELOPMENT_GUIDE.md](doc/LOCAL_DEVELOPMENT_GUIDE.md)** - Development environment details
+4. **[AUTHENTICATION_DEEP_DIVE.md](doc/AUTHENTICATION_DEEP_DIVE.md)** - How authentication works
+
+## 🎯 Quick Learning Exercises
+
+### Exercise 1: Get It Running (15 minutes)
+```bash
+# 1. Start the application
+docker compose up -d
+
+# 2. Set up the database
+docker compose exec web bundle exec rake db:schema:load db:seed
+
+# 3. Load sample data
+docker compose exec web bundle exec rake db:seed:sample
+
+# 4. Visit http://localhost:3000
+# 5. Log in with: demo@example.com / password123
+```
+
+### Exercise 2: Explore the Code (30 minutes)
+- Look at `config/routes.rb` - See how URLs map to controllers
+- Open `app/models/user.rb` - Understand the User model
+- Check `app/controllers/backlogs_controller.rb` - See CRUD operations
+- Review `app/views/backlogs/` - Explore HAML templates
+
+### Exercise 3: Make Your First Change (1 hour)
+- Add a new field to the homepage
+- Create a new route and controller action
+- Modify a view template
+- Run tests with `docker compose exec web bundle exec rspec`
+
+### Exercise 4: Understand Architecture (2 hours)
+- Study how Devise handles authentication
+- Explore how Sidekiq processes background jobs
+- Learn how multi-tenancy works with Account model
+- Examine the Backbone.js frontend code
+
+## 🛠️ Useful Commands
+
+```bash
+# Access Rails console for live experimentation
+make console
+
+# View application logs
+make logs
+
+# Run tests
+make test
+
+# Access database console
+make db-console
+
+# Reset everything and start fresh
+make reset
+```
+
+## 💡 Learning Resources
+
+- **Rails 3.2 Guides**: [guides.rubyonrails.org](https://guides.rubyonrails.org/v3.2/)
+- **Devise Authentication**: [github.com/heartcombo/devise](https://github.com/heartcombo/devise)
+- **Docker Documentation**: [docs.docker.com](https://docs.docker.com/)
+- **Sidekiq Background Jobs**: [github.com/mperham/sidekiq](https://github.com/mperham/sidekiq)
+
+---
