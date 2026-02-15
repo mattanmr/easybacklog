@@ -1,76 +1,158 @@
+# Docker Compose Configuration for easyBacklog
+# ==============================================================================
+# This file defines all services needed to run easyBacklog:
+# - PostgreSQL database for data storage
+# - Redis for caching and background job queuing
+# - Web server (Rails application)
+# - Sidekiq worker for background job processing
+#
+# For students: This demonstrates a typical microservices architecture
+# where each component runs in its own container but communicates over
+# a shared network.
+# ==============================================================================
+
 version: '3.8'
 
 services:
+  # Database Service (PostgreSQL 11)
+  # ============================================================================
+  # PostgreSQL stores all application data (users, accounts, backlogs, etc.)
+  # 
+  # Key concepts:
+  # - Data persists in a named volume (postgres_data)
+  # - Healthcheck ensures database is ready before starting dependent services
+  # - Default credentials are suitable for local development only
   db:
     image: postgres:11
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres        # Database username
+      POSTGRES_PASSWORD: password    # ⚠️ Change in production!
       POSTGRES_DB: easybacklog_development
     volumes:
+      # Named volume for data persistence across container restarts
       - postgres_data:/var/lib/postgresql/data
     ports:
+      # Host:Container port mapping - access DB from host at localhost:5432
       - "5432:5432"
     healthcheck:
+      # Verify PostgreSQL is ready to accept connections
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 10s      # Check every 10 seconds
+      timeout: 5s        # Fail if no response in 5 seconds
+      retries: 5         # Try 5 times before marking unhealthy
 
+  # Redis Service (Key-Value Store)
+  # ============================================================================
+  # Redis serves two purposes in easyBacklog:
+  # 1. Caching layer for frequently accessed data (improves performance)
+  # 2. Message queue for Sidekiq background jobs
+  #
+  # Uses Alpine Linux variant for smaller image size (~30MB vs ~100MB)
   redis:
     image: redis:5-alpine
     ports:
       - "6379:6379"
     volumes:
+      # Persist Redis data (though typically Redis data is considered ephemeral)
       - redis_data:/data
     healthcheck:
+      # Verify Redis is responding to commands
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 3s
       retries: 5
 
+  # Web Application Service (Rails)
+  # ============================================================================
+  # The main Rails application server that handles HTTP requests.
+  # 
+  # Key concepts:
+  # - Builds from local Dockerfile (see ./Dockerfile)
+  # - Waits for db and redis to be healthy before starting
+  # - Volume mount allows live code reloading during development
+  # - Environment variables configure database and Redis connections
   web:
-    build: .
+    build: .                         # Build from Dockerfile in current directory
     env_file:
-      - .env
+      - .env                         # Load environment variables from .env file
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+    # Explanation of command:
+    # 1. Remove stale PID file (Rails creates this to prevent multiple servers)
+    # 2. Start Rails server binding to all interfaces (0.0.0.0)
     volumes:
+      # Mount current directory to /app in container (enables live reloading)
       - .:/app
+      # Cache installed gems in a named volume (speeds up rebuilds)
       - bundle_cache:/usr/local/bundle
     ports:
+      # Access the application at http://localhost:3000
       - "3000:3000"
     depends_on:
+      # Wait for database and Redis to be healthy before starting
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
+      # Database connection string (user:password@host:port/database)
       DATABASE_URL: postgresql://postgres:password@db:5432/easybacklog_development
+      # Redis connection string
       REDIS_URL: redis://redis:6379/0
+      # Run in development mode (enables debugging, auto-reloading, etc.)
       RAILS_ENV: development
+    # Enable interactive terminal (useful for debugging with 'binding.pry')
     stdin_open: true
     tty: true
 
+  # Background Job Worker (Sidekiq)
+  # ============================================================================
+  # Sidekiq processes asynchronous jobs like:
+  # - Sending emails
+  # - Generating PDF reports
+  # - Processing bulk operations
+  # - Cleaning up old data
+  #
+  # It uses the same codebase as 'web' but runs a different command.
+  # Jobs are queued in Redis and processed by this worker.
   sidekiq:
-    build: .
+    build: .                         # Same image as web service
     env_file:
       - .env
-    command: bundle exec sidekiq
+    command: bundle exec sidekiq     # Start Sidekiq worker process
     volumes:
+      # Share code with web service for consistency
       - .:/app
       - bundle_cache:/usr/local/bundle
     depends_on:
+      # Sidekiq needs both database (for job data) and Redis (for queue)
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
+      # Same environment as web service
       DATABASE_URL: postgresql://postgres:password@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
 
+# Named Volumes for Data Persistence
+# ==============================================================================
+# These volumes persist data across container restarts and rebuilds.
+# Data is stored on your host machine (managed by Docker).
+#
+# To remove volumes and all data: docker compose down -v
 volumes:
-  postgres_data:
-  redis_data:
-  bundle_cache:
+  postgres_data:    # Database files (accounts, users, backlogs, etc.)
+  redis_data:       # Redis persistence (cache, job queue)
+  bundle_cache:     # Installed Ruby gems (speeds up rebuilds)
 
+# ==============================================================================
+# Quick Start Commands:
+# 
+# Start all services:     docker compose up -d
+# View logs:              docker compose logs -f web
+# Stop all services:      docker compose down
+# Reset everything:       docker compose down -v
+# 
+# For more commands, see: doc/DOCKER_GUIDE.md
+# ==============================================================================
