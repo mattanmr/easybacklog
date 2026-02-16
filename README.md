@@ -6,9 +6,37 @@ easyBacklog is an intuitive time saving backlog management tool for Agile practi
 
 ![easyBacklog.com home page as at Aug 2022](public/home-screenshot.png)
 
-# 🐳 Quick Start with Docker (Recommended for Learning)
+# 🐳 Quick Start with Docker
 
-Get started with easyBacklog in minutes using Docker:
+Choose your preferred approach:
+
+## Option 1: Standalone Docker Image (Simplest - 2 Commands)
+
+Perfect for students who want the quickest way to get started:
+
+### Automated Quick Start (1 Command)
+```bash
+./quick-start.sh
+```
+
+This script builds the image and starts the container automatically!
+
+### Manual Build and Run (2 Commands)
+```bash
+# 1. Build the image
+docker build -f Dockerfile.standalone -t easybacklog:latest .
+
+# 2. Run the container
+docker run -p 3000:3000 easybacklog:latest
+```
+
+Open http://localhost:3000 and login with `demo@example.com` / `password123`
+
+📖 **See [STANDALONE_DOCKER_IMAGE.md](doc/STANDALONE_DOCKER_IMAGE.md) for detailed instructions**
+
+## Option 2: Docker Compose (Full Development Setup)
+
+Best for learning about microservices architecture:
 
 ```bash
 # 1. Clone the repository
