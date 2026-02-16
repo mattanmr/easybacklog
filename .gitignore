@@ -13,3 +13,4 @@ bin
 public/assets
 .env
 /coverage
+docker-compose.override.yml
