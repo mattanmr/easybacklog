@@ -125,7 +125,7 @@ describe 'Authorization and Security' do
       # Attempt to self-promote (should be rejected)
       put :update, { :account_id => account.id }
       account_user.reload
-      expect(account_user.admin).to be_false
+      account_user.admin.should be_false
     end
 
   end
@@ -185,15 +185,15 @@ describe 'Authorization and Security' do
     it 'should track user login IP and timestamp' do
       sign_in user
       user.reload
-      expect(user.current_sign_in_ip).not_to be_nil
-      expect(user.current_sign_in_at).not_to be_nil
+      user.current_sign_in_ip.should_not be_nil
+      user.current_sign_in_at.should_not be_nil
     end
 
     it 'should increment login count on each signin' do
       initial_count = user.sign_in_count || 0
       sign_in user
       user.reload
-      expect(user.sign_in_count).to be > initial_count
+      user.sign_in_count.should be > initial_count
     end
 
   end
@@ -206,7 +206,7 @@ describe 'Authorization and Security' do
       invited1 = FactoryGirl.create(:invited_user, :account => account, :email => 'user1@example.com')
       invited2 = FactoryGirl.create(:invited_user, :account => account, :email => 'user2@example.com')
       
-      expect(invited1.security_code).not_to eq(invited2.security_code)
+      invited1.security_code.should_not eq(invited2.security_code)
     end
 
     it 'should invalidate invitation after acceptance' do
@@ -269,8 +269,8 @@ describe 'Authorization and Security' do
       user.reload
       
       # Check that password is hashed
-      expect(user.encrypted_password).not_to be_empty
-      expect(user.encrypted_password).not_to eq('MySecurePassword123!')
+      user.encrypted_password.should_not be_empty
+      user.encrypted_password.should_not eq('MySecurePassword123!')
       
       # Verify password still works for authentication
       valid_user = User.find_by_email(user.email)
@@ -287,8 +287,8 @@ describe 'Authorization and Security' do
       user.send_reset_password_instructions
       user.reload
       
-      expect(user.reset_password_token).not_to be_nil
-      expect(user.reset_password_token).not_to include(original_password)
+      user.reset_password_token.should_not be_nil
+      user.reset_password_token.should_not include(original_password)
     end
 
   end

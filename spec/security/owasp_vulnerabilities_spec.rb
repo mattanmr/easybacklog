@@ -46,7 +46,7 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       
       response_body = response.body
       # XSS payload should be escaped, not execute
-      expect(response_body).to include('&lt;script&gt;') || expect(response_body).to include('\\u003cscript\\u003e')
+      (response_body.include?('&lt;script&gt;') || response_body.include?('\u003cscript\u003e')).should be_true
     end
 
     it 'should escape HTML in story descriptions' do
@@ -58,7 +58,7 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       
       response_body = response.body
       # Dangerous attributes should be escaped
-      expect(response_body).not_to include('onerror=')
+      response_body.should_not include('onerror=')
     end
 
     it 'should escape HTML in theme names' do
@@ -69,7 +69,8 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       get :show, :id => backlog.id, :account_id => account.id, :format => :json
       
       # Should not execute script tags
-      response.body.should_not include('<script>')
+      response_body = response.body
+      response_body.should_not include('<script>')
     end
 
     it 'should escape HTML in comments' do
@@ -122,7 +123,7 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       # First reset should work
       user.reset_password!(token, 'NewPassword123!')
       user.reload
-      expect(user.reset_password_token).to be_nil
+      user.reset_password_token.should be_nil
       
       # Second reset with same token should fail
       expect { user.reset_password!(token, 'AnotherPassword123!') }.to raise_error
@@ -137,7 +138,7 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       
       # Password reset should have expiration (typically 6 hours)
       # This test documents the expected behavior
-      expect(user.reset_password_sent_at).not_to be_nil
+      user.reset_password_sent_at.should_not be_nil
     end
 
     it 'should track concurrent sessions (multiple IPs)' do
@@ -147,8 +148,8 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
       
       # New login should update IP tracking
       # (Document for security monitoring)
-      expect(user.sign_in_count).to be >= 1
-      expect(user.current_sign_in_at).not_to be_nil
+      user.sign_in_count.should be >= 1
+      user.current_sign_in_at.should_not be_nil
     end
 
   end
@@ -245,7 +246,7 @@ describe 'OWASP Top 10 Security Vulnerabilities' do
     it 'should not have critical CVE in Rails version' do
       # Rails 3.2 is EOL but document required patches for upgrade path
       rails_version = Rails::VERSION::STRING
-      expect(rails_version).to match(/3\.2/)
+      rails_version.should match(/3\.2/)
       # Document in test that Rails 3.2 needs security patches or upgrade
     end
 

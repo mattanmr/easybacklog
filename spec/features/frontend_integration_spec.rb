@@ -27,7 +27,7 @@ describe 'Frontend Integration Tests', :type => :feature, :js => true do
     it 'should validate numeric velocity field' do
       # When creating backlog with invalid velocity
       fill_in 'backlog_velocity', :with => 'not-a-number' if has_field?('backlog_velocity')
-      page.should have_content('must be a number') || page.should have_content('invalid') rescue nil
+      (page.has_content?('must be a number') || page.has_content?('invalid')).should be_true rescue nil
     end
 
     it 'should display error messages for invalid input' do
@@ -118,12 +118,12 @@ describe 'Frontend Integration Tests', :type => :feature, :js => true do
 
     it 'should navigate to account dashboard' do
       visit account_path(@account)
-      page.should have_content(@account.name) || page.should have_content('Backlog') # Verify we're in account context
+      (page.has_content?(@account.name) || page.has_content?('Backlog')).should be_true # Verify we're in account context
     end
 
     it 'should navigate to backlog list' do
       visit account_backlogs_path(@account)
-      page.should have_content(@backlog.name) || page.should have_content('Backlog') # Should show backlogs
+      (page.has_content?(@backlog.name) || page.has_content?('Backlog')).should be_true # Should show backlogs
     end
 
     it 'should navigate to backlog detail' do
@@ -205,7 +205,7 @@ describe 'Frontend Integration Tests', :type => :feature, :js => true do
 
     it 'should display sprint with stories' do
       visit account_backlog_path(@account, @backlog)
-      page.should have_content(@sprint.name) || page.should have_content('Sprint')
+      (page.has_content?(@sprint.name) || page.has_content?('Sprint')).should be_true
     end
 
     it 'should allow adding story to sprint' do
@@ -288,7 +288,7 @@ describe 'API Response Formats' do
     sign_in user
     get account_backlogs_path(account, :format => :json)
     json = JSON.parse(response.body)
-    expect(json).to be_a(Array) || expect(json).to have_key('backlogs')
+    (json.is_a?(Array) || json.has_key?('backlogs')).should be_true
   end
 
 end

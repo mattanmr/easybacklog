@@ -7,32 +7,32 @@ describe 'External Services and Links Audit' do
   describe 'External Service Configuration' do
 
     it 'should have external services disabled by default' do
-      expect(ExternalServices.enabled?).to be_false
+      ExternalServices.enabled?.should be_false
     end
 
     it 'should have email disabled by default' do
       # Email may be disabled for local dev
-      expect(ExternalServices.email_enabled?).to be_false unless ENV['ENABLE_EMAIL'] == 'true'
+      ExternalServices.email_enabled?.should be_false unless ENV['ENABLE_EMAIL'] == 'true'
     end
 
     it 'should have analytics disabled by default' do
-      expect(ExternalServices.analytics_enabled?).to be_false unless ENV['ENABLE_ANALYTICS'] == 'true'
+      ExternalServices.analytics_enabled?.should be_false unless ENV['ENABLE_ANALYTICS'] == 'true'
     end
 
     it 'should have feedback widget disabled by default' do
-      expect(ExternalServices.feedback_enabled?).to be_false unless ENV['ENABLE_FEEDBACK'] == 'true'
+      ExternalServices.feedback_enabled?.should be_false unless ENV['ENABLE_FEEDBACK'] == 'true'
     end
 
     it 'should have realtime API disabled by default' do
-      expect(ExternalServices.realtime_enabled?).to be_false unless ENV['ENABLE_REALTIME'] == 'true'
+      ExternalServices.realtime_enabled?.should be_false unless ENV['ENABLE_REALTIME'] == 'true'
     end
 
     it 'should have error tracking disabled by default' do
-      expect(ExternalServices.error_tracking_enabled?).to be_false unless ENV['ENABLE_ERROR_TRACKING'] == 'true'
+      ExternalServices.error_tracking_enabled?.should be_false unless ENV['ENABLE_ERROR_TRACKING'] == 'true'
     end
 
     it 'should have performance monitoring disabled by default' do
-      expect(ExternalServices.performance_monitoring_enabled?).to be_false unless ENV['ENABLE_PERFORMANCE_MONITORING'] == 'true'
+      ExternalServices.performance_monitoring_enabled?.should be_false unless ENV['ENABLE_PERFORMANCE_MONITORING'] == 'true'
     end
 
   end
@@ -75,13 +75,13 @@ describe 'External Services and Links Audit' do
     it 'should not have hardcoded easybacklog.com API links' do
       faq_view = File.read(Rails.root.join('app/views/pages/faq.html.haml'))
       # Check for conditionally rendered links
-      expect(faq_view).to include('link_to') || expect(faq_view).to include('ExternalServices')
+      (faq_view.include?('link_to') || faq_view.include?('ExternalServices')).should be_true
     end
 
     it 'should not have hardcoded support.easybacklog.com or userecho URLs in main content' do
       contact_view = File.read(Rails.root.join('app/views/pages/contact.html.haml'))
       # Verify UserEcho links are conditional
-      expect(contact_view).to include('ExternalServices.feedback_enabled?')
+      contact_view.should include('ExternalServices.feedback_enabled?')
     end
 
     it 'should not have GitHub portfolio links in production content' do
@@ -96,7 +96,7 @@ describe 'External Services and Links Audit' do
         end
       end
       
-      expect(portfolio_links).to be_empty
+      portfolio_links.should be_empty
     end
 
   end
@@ -105,14 +105,14 @@ describe 'External Services and Links Audit' do
 
     it 'should use SendGrid SMTP only when ENABLE_EMAIL is true' do
       mail_initializer = File.read(Rails.root.join('config/initializers/mail.rb'))
-      expect(mail_initializer).to include('SENDGRID_USERNAME')
-      expect(mail_initializer).to include('SENDGRID_PASSWORD')
+      mail_initializer.should include('SENDGRID_USERNAME')
+      mail_initializer.should include('SENDGRID_PASSWORD')
     end
 
     it 'should not hardcode SendGrid credentials' do
       mail_initializer = File.read(Rails.root.join('config/initializers/mail.rb'))
-      expect(mail_initializer).not_to include("'username'") unless ENV['SENDGRID_USERNAME']
-      expect(mail_initializer).not_to include("'password'") unless ENV['SENDGRID_PASSWORD']
+      mail_initializer.should_not include("'username'") unless ENV['SENDGRID_USERNAME']
+      mail_initializer.should_not include("'password'") unless ENV['SENDGRID_PASSWORD']
     end
 
   end
@@ -134,7 +134,7 @@ describe 'External Services and Links Audit' do
     it 'should not expose API keys in version control' do
       # Check that .gitignore includes .env
       gitignore = File.read(Rails.root.join('.gitignore'))
-      expect(gitignore).to include('.env')
+      gitignore.should include('.env')
     end
 
     it 'should use ENV variables for all external service keys' do
@@ -142,14 +142,14 @@ describe 'External Services and Links Audit' do
       required_vars = [
         'SENDGRID_USERNAME', 'SENDGRID_PASSWORD',
         'ABLY_API_KEY', 'NEW_RELIC_LICENSE_KEY'
-      ]this.
+      ]
       
       # At least verify the configuration structure expects env vars
       config_files = Dir.glob(Rails.root.join('config/initializers/**/*.rb'))
       config_content = config_files.map { |f| File.read(f) }.join
       
       required_vars.each do |var|
-        expect(config_content).to include(var) if var.match?(/EXTERNAL|SENDGRID|ABLY|NEW_RELIC/)
+        config_content.should include(var) if var.match?(/EXTERNAL|SENDGRID|ABLY|NEW_RELIC/)
       end
     end
 
@@ -170,7 +170,7 @@ describe 'External Services and Links Audit' do
 
     it 'should have documentation for all external service dependencies' do
       doc_files = Dir.glob(Rails.root.join('doc/*.md'))
-      expect(doc_files.count).to be > 0
+      doc_files.count.should be > 0
     end
 
     it 'should have EXTERNAL_SERVICES_GUIDE documentation' do
@@ -184,7 +184,7 @@ describe 'External Services and Links Audit' do
     it 'should use secure session configuration' do
       session_config = File.read(Rails.root.join('config/initializers/session_store.rb'))
       # Verify session is not exposed publicly
-      expect(session_config).not_to be_empty
+      session_config.should_not be_empty
     end
 
   end
@@ -210,8 +210,8 @@ describe 'External Services and Links Audit' do
         matches = content.scan(/http[s]?:\/\/[^localhost|127.0.0.1]/)
         matches.each do |match|
           # Should be in comment
-          line_with_match = content.split("\\n").find { |l| l.include?(match) }
-          expect(line_with_match).to include('//') || expect(line_with_match).to include('#')
+          line_with_match = content.split("\n").find { |l| l.include?(match) }
+          (line_with_match.include?('//') || line_with_match.include?('#')).should be_true
         end
       end
     end

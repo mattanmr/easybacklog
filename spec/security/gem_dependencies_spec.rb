@@ -24,12 +24,12 @@ describe 'Gem Dependencies and Security' do
 
     it 'should be running Rails 3.2.x' do
       rails_version = Rails::VERSION::STRING
-      expect(rails_version).to match(/^3\.2/)
+      rails_version.should match(/^3\.2/)
     end
 
     it 'should have Devise 2.1.x or higher' do
       devise_version = Devise::VERSION
-      expect(devise_version).to match(/^2\./)
+      devise_version.should match(/^2\./)
     end
 
   end
@@ -52,12 +52,12 @@ describe 'Gem Dependencies and Security' do
   describe 'Security-related configuration' do
 
     it 'should have secret_token configured' do
-      expect(Rails.application.config.secret_token).not_to be_nil
-      expect(Rails.application.config.secret_token.length).to be > 30
+      Rails.application.config.secret_token.should_not be_nil
+      Rails.application.config.secret_token.length.should be > 30
     end
 
     it 'should have session key configured' do
-      expect(Rails.application.config.session_options[:key]).not_to be_nil
+      Rails.application.config.session_options[:key].should_not be_nil
     end
 
   end
@@ -85,8 +85,8 @@ describe 'Gemfile Configuration' do
     
     gemfile_lock_content = File.read(gemfile_lock_path)
     # Verify gems have specific versions
-    expect(gemfile_lock_content).to match(/devise \([\d\.]+\)/)
-    expect(gemfile_lock_content).to match(/rails \([\d\.]+\)/)
+    gemfile_lock_content.should match(/devise \([\d\.]+\)/)
+    gemfile_lock_content.should match(/rails \([\d\.]+\)/)
   end
 
   it 'should not include gem vulnerabilities in production dependencies' do
@@ -99,16 +99,16 @@ end
 describe 'Rails Configuration Security' do
 
   it 'should have session store configured' do
-    expect(Rails.application.config.session_store).not_to be_nil
+    Rails.application.config.session_store.should_not be_nil
   end
 
   it 'should have CSRF protection enabled' do
-    expect(Rails.application.config.action_controller.allow_forgery_protection).not_to be_false
+    Rails.application.config.action_controller.allow_forgery_protection.should_not be_false
   end
 
   it 'should not have verbose error pages in production' do
     if Rails.env.production?
-      expect(Rails.application.config.consider_all_requests_local).to be_false
+      Rails.application.config.consider_all_requests_local.should be_false
     end
   end
 
@@ -121,15 +121,15 @@ describe 'Password and Encryption Configuration' do
     user.reload
     
     # Verify bcrypt is used (usually shown in password hash format $2a$, $2b$, or $2y$)
-    expect(user.encrypted_password).not_to be_empty
+    user.encrypted_password.should_not be_empty
     # Bcrypt hashes are 60 characters long
-    expect(user.encrypted_password.length).to be >= 50
+    user.encrypted_password.length.should be >= 50
   end
 
   it 'should have password salt configured' do
     user = FactoryGirl.create(:user)
     user.reload
-    expect(user.password_salt).not_to be_nil
+    user.password_salt.should_not be_nil
   end
 
 end
@@ -139,16 +139,16 @@ describe 'External API Key Security' do
   it 'should not hardcode API keys in source code' do
     # Check that config files use environment variables
     mail_initializer = File.read(Rails.root.join('config/initializers/mail.rb'))
-    expect(mail_initializer).to match(/ENV\[/)
+    mail_initializer.should match(/ENV\[/)
     
     # Verify SendGrid credentials come from environment
-    expect(mail_initializer).to include('SENDGRID')
+    mail_initializer.should include('SENDGRID')
   end
 
   it 'should not store API keys in routes or controllers' do
     routes_file = File.read(Rails.root.join('config/routes.rb'))
     # Should not have hardcoded keys
-    expect(routes_file).not_to match(/key\s*[:=]\s*['"]\w+['"]/)
+    routes_file.should_not match(/key\s*[:=]\s*['"]\w+['"]/)
   end
 
 end
