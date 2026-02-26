@@ -47,7 +47,15 @@ Devise.setup do |config|
   # config.encryptor = :bcrypt # DISABLED - causes "invalid hash" error with bcrypt 3.1.10+
 
   # Setup a pepper to generate the encrypted password.
-  config.pepper = "5716e922a4cc55556e1f0ae066dfac3c114c3ccd71e34fc343430703890d48a37fb2b656a195436dafe7761c4a0ba32ebc02d8699976f925149b52ce311c41f6"
+  config.pepper = ENV['DEVISE_PEPPER'] || begin
+    if Rails.env.development? || Rails.env.test?
+      # Generate a random pepper for development/test if not provided
+      # This is safe as it only affects new password encryption
+      SecureRandom.hex(64)
+    else
+      raise "ERROR: DEVISE_PEPPER environment variable must be set in #{Rails.env} environment"
+    end
+  end
 
   # ==> Configuration for :confirmable
   # The time you want to give your user to confirm his account. During this time

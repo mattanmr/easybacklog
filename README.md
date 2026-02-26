@@ -15,6 +15,22 @@ easyBacklog was shut down because the project was neglected for many years. [Mat
 
 This project has now been open sourced under the [MIT license](./LICENSE). Anyone is free to use this software and modify it as they see fit.
 
+## 🚀 Getting Started (Docker)
+
+Want to run easyBacklog? The quickest way is with Docker:
+
+```bash
+mkdir easybacklog && cd easybacklog
+curl -o docker-compose.yml https://raw.githubusercontent.com/mattanmr/easybacklog/main/docker-compose.example.yml
+curl -o .env https://raw.githubusercontent.com/mattanmr/easybacklog/main/.env.example
+docker-compose up
+# → Open http://localhost:3000
+```
+
+**Full guide:** See [QUICKSTART.md](QUICKSTART.md) for detailed setup, configuration, troubleshooting, and more.
+
+**For developers:** See [LOCAL_DEVELOPMENT_GUIDE.md](doc/LOCAL_DEVELOPMENT_GUIDE.md) to set up for local development without Docker, or [DOCKER_BUILD_GUIDE.md](doc/DOCKER_BUILD_GUIDE.md) to build and publish your own image.
+
 # Running this project
 
 easyBacklog is built on [Ruby on Rails](https://rubyonrails.org/) and not been materially updated since 2015. As such, if you want to run this service it is strongly recommended you follow the upgrade path to a more modern verison of Rails.

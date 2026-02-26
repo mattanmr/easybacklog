@@ -1,18 +1,19 @@
-version: '3.8'
+# docker-compose.example.yml
+# 
+# This is a ready-to-use docker-compose.yml for running easyBacklog
+# published on Docker Hub. Users should copy this file and configure
+# the .env file with their preferences.
+#
+# Usage:
+#   1. Copy this file to docker-compose.yml or use as-is with -f flag
+#   2. Copy .env.example to .env and configure as needed
+#   3. Run: docker-compose up -d
+#   4. Open: http://localhost:3000
+#
+# To use a different Docker Hub image, update the 'image' field below
+# with your preferred tag (e.g., 'myusername/easybacklog:v1.0')
 
-# Docker Compose for LOCAL DEVELOPMENT & BUILDING
-#
-# This file is for developers who want to:
-#   - Build the Docker image locally from the Dockerfile
-#   - Modify and test the application code
-#   - Publish to Docker Hub
-#
-# END USERS: Use docker-compose.example.yml instead!
-#   It references a pre-built image from Docker Hub.
-#   See QUICKSTART.md for simple 3-step setup.
-#
-# Developers: After building, see doc/DOCKER_BUILD_GUIDE.md
-#   for publishing to Docker Hub.
+version: '3.8'
 
 services:
   db:
@@ -24,7 +25,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -34,7 +35,7 @@ services:
   redis:
     image: redis:5-alpine
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -43,16 +44,15 @@ services:
       timeout: 3s
       retries: 5
 
+  # easyBacklog application from Docker Hub
+  # For development/local building, use the Dockerfile in the repository instead
   web:
-    build: .
+    image: ${DOCKER_IMAGE:-mattanmr/easybacklog:latest}
     env_file:
       - .env
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
-    volumes:
-      - .:/app
-      - bundle_cache:/usr/local/bundle
+    command: bash -c "bundle exec rake db:schema:load 2>/dev/null || true && bundle exec rails server -b 0.0.0.0"
     ports:
-      - "3000:3000"
+      - "${WEB_PORT:-3000}:3000"
     depends_on:
       db:
         condition: service_healthy
@@ -61,18 +61,15 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: development
+      RAILS_ENV: ${RAILS_ENV:-development}
     stdin_open: true
     tty: true
 
   sidekiq:
-    build: .
+    image: ${DOCKER_IMAGE:-mattanmr/easybacklog:latest}
     env_file:
       - .env
     command: bundle exec sidekiq
-    volumes:
-      - .:/app
-      - bundle_cache:/usr/local/bundle
     depends_on:
       db:
         condition: service_healthy
@@ -81,10 +78,8 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: development
+      RAILS_ENV: ${RAILS_ENV:-development}
 
 volumes:
   postgres_data:
   redis_data:
-  bundle_cache:
-
