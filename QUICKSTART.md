@@ -40,6 +40,14 @@ Create two files in your `easybacklog` directory:
 
 **`.env`** — Copy from the [repository's .env.example](.env.example)
 
+### Optional: Pre-pull the Image
+
+If you want to confirm the image is available before starting:
+
+```bash
+docker pull mattanmr/easybacklog:latest
+```
+
 ### 3. Start the Application
 
 ```bash
