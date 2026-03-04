@@ -8,12 +8,15 @@ This document summarizes all the ways students and remote users can get easyBack
 
 | Method | Commands | Time | Best For | Documentation |
 |--------|----------|------|----------|---------------|
+| **quick-start-prebuilt.sh** ⚡ | 1 | 2-3 min | Students (if images published) | DOCKER_HUB_PUBLISHING.md |
 | **quick-start-compose.sh** | 1 | 5-10 min | Remote users, students | REMOTE_USER_GUIDE.md |
 | **quick-start.sh** | 1 | 5-10 min | Quick demos, single container | STANDALONE_DOCKER_IMAGE.md |
 | **make setup-with-sample** | 1 | 5-10 min | CLI users with sample data | GETTING_STARTED.md |
 | **make setup** | 1 | 5-10 min | CLI users, basic setup | GETTING_STARTED.md |
 | **Manual Compose** | 4 | 10-15 min | Learning Docker commands | DOCKER_GUIDE.md |
 | **Manual Standalone** | 2 | 5-10 min | Understanding Docker builds | STANDALONE_DOCKER_IMAGE.md |
+
+**⚡ Fastest method** if maintainer has published to Docker Hub!
 
 ---
 
@@ -27,12 +30,17 @@ This document summarizes all the ways students and remote users can get easyBack
 2. Clone the repository
 3. Choose your approach:
 
-**Option A - Full Setup (Recommended):**
+**Option A - Pre-Built Images (Fastest if available):**
+```bash
+./quick-start-prebuilt.sh
+```
+
+**Option B - Full Setup (Local Build):**
 ```bash
 ./quick-start-compose.sh
 ```
 
-**Option B - Simpler Setup:**
+**Option C - Simpler Setup (Single Container):**
 ```bash
 ./quick-start.sh
 ```

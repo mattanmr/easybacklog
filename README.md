@@ -12,9 +12,22 @@ easyBacklog is an intuitive time saving backlog management tool for Agile practi
 
 Choose your preferred approach:
 
-## Option 1: Standalone Docker Image (Simplest - 2 Commands)
+## Option 1: Pre-Built Images from Docker Hub (Fastest!)
 
-Perfect for students who want the quickest way to get started:
+If the maintainer has published images to Docker Hub, you can skip building entirely:
+
+```bash
+# Automated setup (1 command)
+./quick-start-prebuilt.sh
+```
+
+**Time:** ~2-3 minutes (just pulls images, no building!)
+
+📖 **See [DOCKER_HUB_PUBLISHING.md](doc/DOCKER_HUB_PUBLISHING.md)** - For maintainers who want to publish images
+
+## Option 2: Standalone Docker Image (Build Locally - 2 Commands)
+
+Perfect for students who want a self-contained setup:
 
 ### Automated Quick Start (1 Command)
 ```bash
@@ -36,7 +49,7 @@ Open http://localhost:3000 and login with `demo@example.com` / `password123`
 
 📖 **See [STANDALONE_DOCKER_IMAGE.md](doc/STANDALONE_DOCKER_IMAGE.md) for detailed instructions**
 
-## Option 2: Docker Compose (Full Development Setup)
+## Option 3: Docker Compose (Full Development Setup)
 
 Best for learning about microservices architecture:
 

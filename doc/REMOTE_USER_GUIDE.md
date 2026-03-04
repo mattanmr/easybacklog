@@ -18,13 +18,38 @@ After installing, make sure Docker Desktop is running (you should see the whale 
 
 ---
 
-## Two Ways to Run easyBacklog
+## Three Ways to Run easyBacklog
 
 Choose the approach that works best for you:
 
-### Method 1: Standalone Image (Simplest - Recommended for First Time)
+### Method 1: Pre-Built Images from Docker Hub (Fastest! ⚡)
 
-**What you get:** Everything in one container, easiest to set up.
+**What you get:** Pull pre-built images (no 5-minute build wait!)
+
+**When available:** If your instructor has published images to Docker Hub
+
+#### Step 1: Download the project
+```bash
+git clone https://github.com/mattanmr/easybacklog.git
+cd easybacklog
+```
+
+*Don't have git? Download as ZIP from GitHub and extract it.*
+
+#### Step 2: Run the quick start script
+```bash
+./quick-start-prebuilt.sh
+```
+
+**That's it!** Wait 2-3 minutes to download and start, then open http://localhost:3000
+
+**Time saved:** Skip the 5-minute build process!
+
+---
+
+### Method 2: Standalone Image (Build Locally - Simple)
+
+**What you get:** Everything in one container, build it yourself.
 
 #### Step 1: Download the project
 ```bash
@@ -47,7 +72,7 @@ cd easybacklog
 
 ---
 
-### Method 2: Docker Compose (Recommended for Learning)
+### Method 3: Docker Compose (Build Locally - Recommended for Learning)
 
 **What you get:** Separate containers for database, cache, web server, and background jobs. Better for learning.
 
@@ -172,6 +197,13 @@ Start Docker Desktop. You should see the whale icon in your system tray (Mac/Win
 ### "Database doesn't exist" error
 
 **For Docker Compose only:**
+**For pre-built images (docker-compose.prebuilt.yml):**
+```bash
+docker compose -f docker-compose.prebuilt.yml exec web bundle exec rake db:schema:load
+docker compose -f docker-compose.prebuilt.yml exec web bundle exec rake db:seed
+```
+
+**For local build (docker-compose.yml):**
 ```bash
 docker compose exec web bundle exec rake db:schema:load
 docker compose exec web bundle exec rake db:seed
@@ -186,7 +218,13 @@ docker rmi easybacklog:latest
 ./quick-start.sh
 ```
 
-**Docker Compose:**
+**Docker Compose (with pre-built images):**
+```bash
+docker compose -f docker-compose.prebuilt.yml down -v
+./quick-start-prebuilt.sh
+```
+
+**Docker Compose (local build):**
 ```bash
 docker compose down -v
 make setup
@@ -202,6 +240,7 @@ If you're still stuck:
    - [GETTING_STARTED.md](GETTING_STARTED.md) - Comprehensive guide
    - [DOCKER_GUIDE.md](DOCKER_GUIDE.md) - All Docker commands
    - [STANDALONE_DOCKER_IMAGE.md](STANDALONE_DOCKER_IMAGE.md) - Standalone image details
+   - [DOCKER_HUB_PUBLISHING.md](DOCKER_HUB_PUBLISHING.md) - Pre-built images guide
 
 2. **Check the logs** for error messages and search for them online
 
@@ -217,6 +256,14 @@ If you're still stuck:
 
 **Fastest way to get started:**
 
+**If images are on Docker Hub (fastest):**
+1. Install Docker Desktop
+2. Clone the repository
+3. Run `./quick-start-prebuilt.sh`
+4. Open http://localhost:3000
+5. Login with demo@example.com / password123
+
+**If building locally:**
 1. Install Docker Desktop
 2. Clone the repository
 3. Run `./quick-start-compose.sh` (recommended) or `./quick-start.sh` (simpler)
