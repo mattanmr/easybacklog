@@ -16,6 +16,7 @@ help:
 	@echo ""
 	@echo "Setup & Start:"
 	@echo "  make setup          - Initial setup (first time only)"
+	@echo "  make setup-with-sample - Initial setup with demo data"
 	@echo "  make start          - Start all services in background"
 	@echo "  make stop           - Stop all services (keeps data)"
 	@echo "  make restart        - Restart all services"
@@ -34,6 +35,7 @@ help:
 	@echo ""
 	@echo "Database:"
 	@echo "  make db-setup       - Set up database (schema + seed)"
+	@echo "  make db-seed-sample - Load sample demo data"
 	@echo "  make db-reset       - Reset database (DELETES DATA)"
 	@echo "  make db-seed        - Seed database with initial data"
 	@echo ""
@@ -52,7 +54,24 @@ setup:
 	@sleep 5
 	docker compose exec web bundle exec rake db:schema:load
 	docker compose exec web bundle exec rake db:seed
+	@echo ""
 	@echo "✅ Setup complete! Access at http://localhost:3000"
+	@echo ""
+	@echo "💡 Tip: Run 'make db-seed-sample' to load demo data (demo@example.com / password123)"
+
+# Setup with sample data included
+setup-with-sample:
+	@echo "🚀 Setting up easyBacklog with sample data..."
+	@if [ ! -f .env ]; then cp .env.example .env && echo "✓ Created .env file"; fi
+	docker compose up -d --build
+	@echo "⏳ Waiting for services to be ready..."
+	@sleep 5
+	docker compose exec web bundle exec rake db:schema:load
+	docker compose exec web bundle exec rake db:seed
+	docker compose exec web bundle exec rake db:seed:sample
+	@echo ""
+	@echo "✅ Setup complete! Access at http://localhost:3000"
+	@echo "📧 Demo credentials: demo@example.com / password123"
 
 # Start all services
 start:
@@ -139,6 +158,13 @@ db-seed:
 	@echo "🌱 Seeding database..."
 	docker compose exec web bundle exec rake db:seed
 	@echo "✓ Database seeded"
+
+# Load sample data for demo/learning
+db-seed-sample:
+	@echo "🌱 Loading sample data..."
+	docker compose exec web bundle exec rake db:seed:sample
+	@echo "✓ Sample data loaded"
+	@echo "📧 Demo credentials: demo@example.com / password123"
 
 # Show status of running containers
 status:

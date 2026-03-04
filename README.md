@@ -8,6 +8,8 @@ easyBacklog is an intuitive time saving backlog management tool for Agile practi
 
 # 🐳 Quick Start with Docker
 
+**New to Docker or easyBacklog?** → Start with [REMOTE_USER_GUIDE.md](doc/REMOTE_USER_GUIDE.md) - our simplest guide!
+
 Choose your preferred approach:
 
 ## Option 1: Standalone Docker Image (Simplest - 2 Commands)
@@ -38,22 +40,31 @@ Open http://localhost:3000 and login with `demo@example.com` / `password123`
 
 Best for learning about microservices architecture:
 
+### Automated Quick Start (1 Command)
 ```bash
-# 1. Clone the repository
-git clone https://github.com/mattanmr/easybacklog.git
-cd easybacklog
+./quick-start-compose.sh
+```
 
-# 2. Copy environment configuration
+This script automatically sets up everything including sample data!
+
+### Manual Setup Using Makefile (1 Command)
+```bash
+make setup
+```
+
+### Manual Setup with Docker Compose (4 Commands)
+```bash
+# 1. Copy environment configuration
 cp .env.example .env
 
-# 3. Start all services (database, Redis, web server, background jobs)
+# 2. Start all services (database, Redis, web server, background jobs)
 docker compose up -d
 
-# 4. Set up the database
+# 3. Set up the database
 docker compose exec web bundle exec rake db:schema:load
 docker compose exec web bundle exec rake db:seed
 
-# 5. Open your browser
+# 4. Open your browser
 open http://localhost:3000
 ```
 

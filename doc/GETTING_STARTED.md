@@ -35,14 +35,42 @@ docker compose version  # Should show v2.x or higher
 
 ## Quick Start
 
-### Step 1: Clone the Repository
+### Simplest Method: Use the Quick Start Script
+
+```bash
+./quick-start-compose.sh
+```
+
+This automated script:
+- ✅ Checks Docker installation
+- ✅ Creates .env file
+- ✅ Builds and starts all services
+- ✅ Initializes the database
+- ✅ Optionally loads sample data
+- ✅ Shows status and access instructions
+
+**Done in one command!** 🎉
+
+### Alternative: Use the Makefile
+
+```bash
+make setup
+```
+
+This is equivalent to the script but slightly less verbose.
+
+### Manual Setup (Step by Step)
+
+If you prefer to understand each step:
+
+#### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/mattanmr/easybacklog.git
 cd easybacklog
 ```
 
-### Step 2: Set Up Environment Variables
+#### Step 2: Set Up Environment Variables
 
 ```bash
 cp .env.example .env
@@ -50,7 +78,7 @@ cp .env.example .env
 
 The default `.env` works for local development. The application will run without external services like SendGrid or Ably.
 
-### Step 3: Start the Application
+#### Step 3: Start the Application
 
 ```bash
 docker compose up -d
@@ -63,7 +91,7 @@ This command:
 
 **Pro tip:** Remove the `-d` flag to see logs in real-time: `docker compose up`
 
-### Step 4: Initialize the Database
+#### Step 4: Initialize the Database
 
 ```bash
 # Load the database schema
@@ -75,7 +103,7 @@ docker compose exec web bundle exec rake db:seed
 
 **Note:** We use `db:schema:load` instead of `db:migrate` because the old migrations have compatibility issues with modern Ruby gems. The schema file is the source of truth.
 
-### Step 5: Access the Application
+#### Step 5: Access the Application
 
 Open your browser to **http://localhost:3000**
 
