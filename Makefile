@@ -1,7 +1,6 @@
 # Makefile for easyBacklog
 # ==============================================================================
-# This Makefile provides convenient shortcuts for common Docker operations.
-# For students: Makefiles are a standard way to automate development tasks.
+# Shortcuts for common Docker operations.
 #
 # Usage: make <target>
 # Example: make start, make logs, make console
@@ -159,7 +158,7 @@ db-seed:
 	docker compose exec web bundle exec rake db:seed
 	@echo "✓ Database seeded"
 
-# Load sample data for demo/learning
+# Load sample data
 db-seed-sample:
 	@echo "🌱 Loading sample data..."
 	docker compose exec web bundle exec rake db:seed:sample

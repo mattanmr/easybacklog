@@ -1,8 +1,6 @@
 # Dockerfile for easyBacklog
 # ==================================================================
-# This Dockerfile creates a container for running the easyBacklog
-# Rails 3.2 application. It's designed for students to learn about
-# containerizing legacy Rails applications.
+# Builds a container for running the easyBacklog Rails 3.2 application.
 # ==================================================================
 
 # Base Image: Ruby 2.6.10 on Debian Bullseye

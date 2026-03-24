@@ -1,7 +1,7 @@
-# Sample Data Seed for Learning and Experimentation
+# Sample Data Seed
 # ==============================================================================
-# This file creates sample data to help students explore easyBacklog's features.
-# Run this after db:seed to populate the database with example data:
+# Creates demo data for easyBacklog (user, account, backlog, themes, stories).
+# Run this after db:seed to populate the database:
 #
 #   docker compose exec web bundle exec rake db:seed:sample
 #
