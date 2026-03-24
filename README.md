@@ -24,15 +24,21 @@ See [CHANGELOG.md](CHANGELOG.md) for details on the Docker containerization and 
 ```bash
 git clone https://github.com/mattanmr/easybacklog.git
 cd easybacklog
-make setup
+cp .env.example .env
+docker compose up -d --build
 ```
 
-This builds the Docker images, starts all services, and initializes the database. First run takes ~3-5 minutes.
+Wait ~3-5 minutes for the first build, then initialize the database:
+
+```bash
+docker compose exec web bundle exec rake db:schema:load
+docker compose exec web bundle exec rake db:seed
+```
 
 To also load demo data (a sample user, backlog, themes, and stories):
 
 ```bash
-make setup-with-sample
+docker compose exec web bundle exec rake db:seed:sample
 ```
 
 Demo credentials: `demo@example.com` / `password123`
@@ -50,26 +56,22 @@ Once running, open http://localhost:3000.
 
 ## Common Commands
 
-Run `make help` for the full list. Key commands:
-
-| Command               | Description                        |
-|-----------------------|------------------------------------|
-| `make start`          | Start all services                 |
-| `make stop`           | Stop all services (keeps data)     |
-| `make restart`        | Restart all services               |
-| `make logs`           | Follow logs from all services      |
-| `make console`        | Open Rails console                 |
-| `make bash`           | Shell into the web container       |
-| `make db-console`     | Open PostgreSQL console            |
-| `make test`           | Run RSpec tests                    |
-| `make test-cucumber`  | Run Cucumber integration tests     |
-| `make db-seed-sample` | Load demo data                     |
-| `make status`         | Show running containers            |
-| `make reset`          | Tear down everything (deletes data)|
+| Command | Description |
+|---------|-------------|
+| `docker compose up -d` | Start all services |
+| `docker compose down` | Stop all services (keeps data) |
+| `docker compose restart` | Restart all services |
+| `docker compose logs -f` | Follow logs from all services |
+| `docker compose exec web bundle exec rails console` | Open Rails console |
+| `docker compose exec web bash` | Shell into the web container |
+| `docker compose exec db psql -U postgres -d easybacklog_development` | Open PostgreSQL console |
+| `docker compose exec web bundle exec rspec` | Run RSpec tests |
+| `docker compose exec web bundle exec cucumber` | Run Cucumber integration tests |
+| `docker compose down -v` | Tear down everything (deletes data) |
 
 ## Configuration
 
-Copy `.env.example` to `.env` to customize settings. `make setup` does this automatically if `.env` doesn't exist.
+Copy `.env.example` to `.env` to customize settings (done in setup above).
 
 All external services (SendGrid, Ably, New Relic) are disabled by default. The application works fully offline. See `.env.example` for details on enabling them.
 
