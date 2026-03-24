@@ -35,11 +35,6 @@ class PagesController < ApplicationController
     render json: ably.auth.create_token_request(client_id: current_user.id.to_s)
   end
 
-  # /raise-error for testing error capture
-  def raise_error
-    raise "Intentional error thrown"
-  end
-
   def contact
     # Auto-renders: app/views/pages/contact.html.haml
   end

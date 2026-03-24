@@ -110,7 +110,7 @@ docker compose down
 docker compose down -v
 ```
 
-📚 **For more details, see [DOCKER_GUIDE.md](doc/DOCKER_GUIDE.md) and [GETTING_STARTED.md](doc/GETTING_STARTED.md)**
+📚 **For more details, see [DOCKER_GUIDE.md](doc/DOCKER_GUIDE.md), [GETTING_STARTED.md](doc/GETTING_STARTED.md), [QUICKSTART.md](QUICKSTART.md), and [DOCKER_BUILD_GUIDE.md](doc/DOCKER_BUILD_GUIDE.md)**
 
 ---
 

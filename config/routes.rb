@@ -97,7 +97,6 @@ EasyBacklog::Application.routes.draw do
   get '/contact' => 'pages#contact', :as => 'contact'
   get '/faq' => 'pages#faq', :as => 'faq'
   get '/browser-support' => 'pages#browser_support', :as => 'browser_support'
-  get '/raise-error' => 'pages#raise_error'
 
   get '/beta/:unique_code' => 'welcome#index', :constraints => { :code => /[a-z0-9]{6}/i }, :as => 'beta_signup_referral'
 

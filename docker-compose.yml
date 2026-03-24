@@ -11,6 +11,20 @@
 # a shared network.
 # ==============================================================================
 
+# Docker Compose for LOCAL DEVELOPMENT & BUILDING
+#
+# This file is for developers who want to:
+#   - Build the Docker image locally from the Dockerfile
+#   - Modify and test the application code
+#   - Publish to Docker Hub
+#
+# END USERS: Use docker-compose.example.yml instead!
+#   It references a pre-built image from Docker Hub.
+#   See QUICKSTART.md for simple 3-step setup.
+#
+# Developers: After building, see doc/DOCKER_BUILD_GUIDE.md
+#   for publishing to Docker Hub.
+
 services:
   # Database Service (PostgreSQL 11)
   # ============================================================================
@@ -24,7 +38,7 @@ services:
     image: postgres:11
     environment:
       POSTGRES_USER: postgres        # Database username
-      POSTGRES_PASSWORD: password    # ⚠️ Change in production!
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}  # ⚠️ Change in production!
       POSTGRES_DB: easybacklog_development
     volumes:
       # Named volume for data persistence across container restarts
@@ -93,7 +107,7 @@ services:
         condition: service_healthy
     environment:
       # Database connection string (user:password@host:port/database)
-      DATABASE_URL: postgresql://postgres:password@db:5432/easybacklog_development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       # Redis connection string
       REDIS_URL: redis://redis:6379/0
       # Run in development mode (enables debugging, auto-reloading, etc.)
@@ -129,7 +143,7 @@ services:
         condition: service_healthy
     environment:
       # Same environment as web service
-      DATABASE_URL: postgresql://postgres:password@db:5432/easybacklog_development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
 

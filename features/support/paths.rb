@@ -42,6 +42,10 @@ module NavigationHelpers
     else
       begin
         page_name =~ /^the (.*) page$/
+        if $1.nil?
+          raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
+            "Now, go and add a mapping in #{__FILE__}"
+        end
         path_components = $1.split(/\s+/)
         self.send(path_components.push('path').join('_').to_sym)
       rescue NoMethodError, ArgumentError
