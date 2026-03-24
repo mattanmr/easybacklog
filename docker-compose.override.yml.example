@@ -1,0 +1,85 @@
+# docker-compose.override.yml.example
+# ==============================================================================
+# This is an EXAMPLE file showing how students can customize their Docker setup
+# without modifying the main docker-compose.yml file.
+#
+# To use this file:
+# 1. Copy it to docker-compose.override.yml:
+#    cp docker-compose.override.yml.example docker-compose.override.yml
+#
+# 2. Uncomment and modify the sections you need
+#
+# 3. Restart your services:
+#    docker compose down && docker compose up -d
+#
+# Docker Compose automatically reads docker-compose.override.yml and merges it
+# with docker-compose.yml, allowing you to customize without changing the base.
+# ==============================================================================
+
+services:
+  # Example: Change the web server port
+  # ============================================================================
+  # Uncomment to run the web server on port 3001 instead of 3000
+  # web:
+  #   ports:
+  #     - "3001:3000"
+
+  # Example: Add environment variables for debugging
+  # ============================================================================
+  # Uncomment to enable verbose Rails logging and other debug features
+  # web:
+  #   environment:
+  #     RAILS_LOG_LEVEL: debug
+  #     VERBOSE: true
+
+  # Example: Mount additional volumes
+  # ============================================================================
+  # Uncomment to add custom scripts or configuration
+  # web:
+  #   volumes:
+  #     - ./my_scripts:/app/my_scripts
+
+  # Example: Change database port
+  # ============================================================================
+  # Uncomment to access PostgreSQL on a different port
+  # db:
+  #   ports:
+  #     - "5433:5432"
+
+  # Example: Add a database GUI tool (pgAdmin)
+  # ============================================================================
+  # Uncomment to add pgAdmin for browsing the database via web interface
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - db
+
+  # Example: Add Redis Commander (Redis GUI)
+  # ============================================================================
+  # Uncomment to add Redis Commander for browsing Redis data
+  # redis-commander:
+  #   image: rediscommander/redis-commander:latest
+  #   environment:
+  #     - REDIS_HOSTS=local:redis:6379
+  #   ports:
+  #     - "8081:8081"
+  #   depends_on:
+  #     - redis
+
+# ==============================================================================
+# Common Use Cases for Students:
+#
+# 1. Port Conflicts: Change ports if 3000, 5432, or 6379 are already in use
+# 2. Debugging: Enable verbose logging or add debugging tools
+# 3. Development Tools: Add database browsers, Redis GUIs, etc.
+# 4. Custom Configuration: Override environment variables
+# 5. Performance: Adjust resource limits for containers
+#
+# Remember: docker-compose.override.yml is gitignored by default, so your
+# personal customizations won't be committed to the repository.
+# ==============================================================================
