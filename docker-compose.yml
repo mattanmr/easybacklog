@@ -5,25 +5,7 @@
 # - Redis for caching and background job queuing
 # - Web server (Rails application)
 # - Sidekiq worker for background job processing
-#
-# For students: This demonstrates a typical microservices architecture
-# where each component runs in its own container but communicates over
-# a shared network.
 # ==============================================================================
-
-# Docker Compose for LOCAL DEVELOPMENT & BUILDING
-#
-# This file is for developers who want to:
-#   - Build the Docker image locally from the Dockerfile
-#   - Modify and test the application code
-#   - Publish to Docker Hub
-#
-# END USERS: Use docker-compose.example.yml instead!
-#   It references a pre-built image from Docker Hub.
-#   See QUICKSTART.md for simple 3-step setup.
-#
-# Developers: After building, see doc/DOCKER_BUILD_GUIDE.md
-#   for publishing to Docker Hub.
 
 services:
   # Database Service (PostgreSQL 11)
@@ -166,5 +148,5 @@ volumes:
 # Stop all services:      docker compose down
 # Reset everything:       docker compose down -v
 # 
-# For more commands, see: doc/DOCKER_GUIDE.md
+# Run 'make help' for the full command list.
 # ==============================================================================
