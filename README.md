@@ -25,6 +25,17 @@ See [CHANGELOG.md](CHANGELOG.md) for details on the Docker containerization and 
 git clone https://github.com/mattanmr/easybacklog.git
 cd easybacklog
 cp .env.example .env
+```
+
+Open `.env` and set `SECRET_TOKEN` to a non-empty random value (required even in development, otherwise sessions are lost on every restart):
+
+```bash
+echo "SECRET_TOKEN=$(openssl rand -hex 64)" >> .env
+```
+
+Then start the application:
+
+```bash
 docker compose up -d --build
 ```
 
@@ -72,6 +83,8 @@ Once running, open http://localhost:3000.
 ## Configuration
 
 Copy `.env.example` to `.env` to customize settings (done in setup above).
+
+**Important:** `SECRET_TOKEN` must be set to a non-empty value even in development. Without it a new random token is generated on every server restart, which invalidates all existing sessions. See the Setup section for how to generate one.
 
 All external services (SendGrid, Ably, New Relic) are disabled by default. The application works fully offline. See `.env.example` for details on enabling them.
 
