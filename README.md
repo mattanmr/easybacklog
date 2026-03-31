@@ -25,6 +25,17 @@ See [CHANGELOG.md](CHANGELOG.md) for details on the Docker containerization and 
 git clone https://github.com/mattanmr/easybacklog.git
 cd easybacklog
 cp .env.example .env
+```
+
+Then open `.env` and set `SECRET_TOKEN` to a randomly-generated value:
+
+```bash
+ruby -r securerandom -e 'puts SecureRandom.hex(64)'
+```
+
+If left empty, a token is auto-generated on every container restart — which invalidates all sessions. Setting it once keeps you logged in across restarts.
+
+```bash
 docker compose up -d --build
 ```
 
