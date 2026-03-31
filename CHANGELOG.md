@@ -42,7 +42,6 @@ The application now works fully offline.
 
 ## Development Tooling
 
-- **Makefile** with commands for setup, start/stop, logs, console, testing, database operations, and cleanup (`make help` for full list)
 - **`.env.example`** with documented configuration for all services
 - **`docker-compose.override.yml.example`** for optional local customization (port changes, debugging, pgAdmin, etc.)
 - **External services control** via `config/initializers/external_services.rb` — all 6 external services (SendGrid, Google Analytics, UserEcho, Ably, Exceptional, New Relic) disabled by default with individual ENV flags to re-enable
@@ -50,10 +49,10 @@ The application now works fully offline.
 ## Sample Data
 
 - Added `db/seeds_sample.rb` with a demo user (`demo@example.com` / `password123`), sample account, backlog with 4 themes, 8 user stories, and a sprint
-- Available via `make db-seed-sample` or `make setup-with-sample`
+- Available via `docker compose exec web bundle exec rake db:seed:sample`
 - Idempotent — safe to run multiple times
 
 ## Test Suite
 
 - Implemented 6 RSpec spec files covering functionality, database integrity, frontend integration, external services isolation, and security
-- Run with `make test` (RSpec) or `make test-cucumber` (Cucumber integration tests)
+- Run with `docker compose exec web bundle exec rspec` (RSpec) or `docker compose exec web bundle exec cucumber` (Cucumber)
