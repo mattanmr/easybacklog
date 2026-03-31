@@ -27,10 +27,10 @@ cd easybacklog
 cp .env.example .env
 ```
 
-Then open `.env` and set `SECRET_TOKEN` to a randomly-generated value:
+Then set `SECRET_TOKEN` in `.env` with a randomly-generated value:
 
 ```bash
-ruby -r securerandom -e 'puts SecureRandom.hex(64)'
+sed -i "s/^SECRET_TOKEN=$/SECRET_TOKEN=$(openssl rand -hex 64)/" .env
 ```
 
 If left empty, a token is auto-generated on every container restart — which invalidates all sessions. Setting it once keeps you logged in across restarts.
