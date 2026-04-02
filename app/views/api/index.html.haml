@@ -17,7 +17,7 @@
         All EXAMPLE REQUESTS listed on the right can be run directly from your console.  Copy and paste the curl commands into your terminal to test the API using our demo API account.  Please note however that the demo API account only has read rights so no updates will succeed.
 
       %p
-        We monitor our API constantly to ensure we hit our target of at least 99.99% uptime.  In addition, we openly publicise our API uptime using a 3rd party service, #{link_to 'click here to view the current API service status and uptime reports', 'http://api-status.easybacklog.com/lfg0irj2b7v7/573193'}.
+        We monitor our API constantly to ensure we hit our target of at least 99.99% uptime. API uptime reports are available from your local deployment monitoring stack.
 
     .route-example.first-route-list
       %h2 API Endpoint
@@ -47,8 +47,8 @@
       %h2 Authentication
 
       %p
-        You authenticate to the easyBacklog API by providing one of your #{link_to 'API keys', 'https://easybacklog.com/user-tokens'} in the request.
-        You can #{link_to 'manage your API keys', 'https://easybacklog.com/user-tokens'} from your #{link_to 'account', 'https://easybacklog.com/users/edit'}. You can have multiple API keys active at one time. Your API keys carry many privileges, so be sure to keep them secret!
+        You authenticate to the easyBacklog API by providing one of your #{link_to 'API keys', user_tokens_path} in the request.
+        You can #{link_to 'manage your API keys', user_tokens_path} from your #{link_to 'account', edit_user_registration_path}. You can have multiple API keys active at one time. Your API keys carry many privileges, so be sure to keep them secret!
         All API requests must be made over #{link_to 'HTTPS', 'http://en.wikipedia.org/wiki/HTTP_Secure'}. Calls made over plain HTTP will fail. You must authenticate for all requests.
 
       %p
@@ -57,7 +57,7 @@
   .route-section.list-start
     .route-info.indent
       %h3= link_to 'HTTP Basic Auth', 'http://en.wikipedia.org/wiki/Basic_access_authentication'
-      Provide your user ID as the basic auth username, and your API key as the basic auth password.  You can find your user ID at the bottom of your #{link_to 'API access page', 'https://easybacklog.com/user-tokens'}.
+      Provide your user ID as the basic auth username, and your API key as the basic auth password.  You can find your user ID at the bottom of your #{link_to 'API access page', user_tokens_path}.
     .route-example
       %code.rest.rest-request
         .prompt

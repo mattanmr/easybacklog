@@ -56,3 +56,22 @@ The application now works fully offline.
 
 - Implemented 6 RSpec spec files covering functionality, database integrity, frontend integration, external services isolation, and security
 - Run with `docker compose exec web bundle exec rspec` (RSpec) or `docker compose exec web bundle exec cucumber` (Cucumber)
+
+## External Link and Mail Domain Cleanup (2026-04-02)
+
+- Removed remaining hardcoded external easybacklog URLs from runtime-facing views (contact, FAQ, API docs, API access, and top navigation)
+- Replaced external API/status/blog references with local/internal routes or local deployment wording
+- Updated browser-support and tracking copy to remove hard dependency on easybacklog.com
+- Updated mailer footer templates to use helper-driven values instead of hardcoded URLs/emails
+- Added helper defaults for local-safe values:
+	- `APP_URL` fallback: `http://localhost:3000`
+	- `SUPPORT_EMAIL` fallback: `support@localhost.test`
+- Updated backend mail and domain defaults to ENV-backed local-safe values:
+	- `ADMIN_EMAIL` fallback: `admin@localhost.test`
+	- `MAIL_DOMAIN` fallback: `localhost`
+	- `MAILER_SENDER` fallback: `robot@localhost.test`
+	- `DEFAULT_FROM_EMAIL` fallback: `easyBacklog <no-reply@localhost.test>`
+	- `APP_DNS` fallback: `localhost`
+	- `FONTS_DOMAIN` fallback: `//#{config.dns}`
+- Updated `config/heroku.yml` default `app_url` to `http://localhost:3000`
+- Updated demo API helper/spec fixtures from `demo-api@easybacklog.com` to `demo-api@localhost.test`

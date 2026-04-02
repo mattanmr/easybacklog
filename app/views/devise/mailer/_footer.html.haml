@@ -1,8 +1,8 @@
 %p
   This email comes from easyBacklog
   %br/
-  = link_to 'http://easybacklog.com', 'http://easybacklog.com'
+  = link_to abs_home_url, abs_home_url
 
 %p{:style => 'border-top: 1px solid #AAAAAA' }
   If you have received this email in error, please contact
-  = link_to 'mailto:support@easybacklog.com', 'support@easybacklog.com'
+  = link_to "mailto:#{support_email}", support_email

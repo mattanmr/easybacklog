@@ -13,7 +13,11 @@ module ApplicationHelper
   end
 
   def abs_home_url
-    'http://easybacklog.com'
+    ENV['APP_URL'].presence || 'http://localhost:3000'
+  end
+
+  def support_email
+    ENV['SUPPORT_EMAIL'].presence || 'support@localhost.test'
   end
 
   def dont_use_base_css
