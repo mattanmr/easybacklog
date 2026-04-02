@@ -1,11 +1,11 @@
 # easyBacklog Runtime Docker Compose (Release Artifact)
 # ==============================================================================
-# This file is intended for pull-and-run usage on any machine without cloning
-# the repository or building images locally.
+# Upload this file as a GitHub Release asset named docker-compose.yml.
+# On the target machine, no -f flag is required.
 #
 # Usage:
-# 1) docker compose -f easybacklog-compose.yml pull
-# 2) docker compose -f easybacklog-compose.yml up -d
+# 1) docker compose pull
+# 2) docker compose up -d
 # ==============================================================================
 
 services:
