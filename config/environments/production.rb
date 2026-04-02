@@ -24,7 +24,7 @@ EasyBacklog::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.dns = 'easybacklog.com' if config.dns == 'localhost' # just in case the environment var is missing in production, just force through easybacklog.com
+  config.dns = ENV.fetch('APP_DNS', 'localhost') if config.dns == 'localhost'
 
   config.action_mailer.default_url_options = { :host => config.dns }
 
@@ -34,7 +34,7 @@ EasyBacklog::Application.configure do
 
   config.asset_host = 'd2n3m6ttt1syhb.cloudfront.net'
   config.assets.compress = true
-  config.fonts_domain = '//easybacklog.com'
+  config.fonts_domain = ENV.fetch('FONTS_DOMAIN', "//#{config.dns}")
 
   # ensure MD5 fingerprinting is on
   config.assets.digest = true

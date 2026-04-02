@@ -18,7 +18,7 @@ describe ApiHelper do
     end
 
     it 'should return a demo user if set up' do
-      user = FactoryGirl.create(:user, :email => 'demo-api@easybacklog.com')
+      user = FactoryGirl.create(:user, :email => 'demo-api@localhost.test')
       helper.demo_api_user.should == user
     end
   end
@@ -137,7 +137,7 @@ describe ApiHelper do
   end
 
   context 'user exists without user token' do
-    let!(:user) { FactoryGirl.create(:user, :email => 'demo-api@easybacklog.com') }
+    let!(:user) { FactoryGirl.create(:user, :email => 'demo-api@localhost.test') }
 
     describe '#demo_api_user_id' do
       it 'should return user id' do
@@ -155,7 +155,7 @@ describe ApiHelper do
     let!(:default_scoring_rule) { FactoryGirl.create(:scoring_rule_default) }
     let!(:default_sprint_story_status) { FactoryGirl.create(:sprint_story_status, :status => 'To do', :code => SprintStoryStatus::DEFAULT_CODE) }
 
-    let!(:user) { FactoryGirl.create(:user, :email => 'demo-api@easybacklog.com') }
+    let!(:user) { FactoryGirl.create(:user, :email => 'demo-api@localhost.test') }
     let!(:demo_api_user_token) { FactoryGirl.create(:user_token, :user => user) }
     let!(:account_user) { FactoryGirl.create(:account_user, :user => user) }
     let!(:account) { account_user.account }

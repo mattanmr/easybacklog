@@ -25,7 +25,7 @@ Bruce Thomas, UK, http://www.linkedin.com/in/fliptopbox, https://plus.google.com
 
 /* SITE */
 
-Contact: support@easybacklog.com
+Contact: support@localhost.test
 
 Developed with:
  * Ruby on Rails 3

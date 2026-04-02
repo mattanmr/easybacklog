@@ -6,7 +6,7 @@ module ApiHelper
   end
 
   def demo_api_user
-    User.find_by_email('demo-api@easybacklog.com')
+    User.find_by_email('demo-api@localhost.test')
   end
 
   def demo_api_user_id

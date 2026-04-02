@@ -6,7 +6,7 @@ App.Views.BacklogCreateUpdateMethods = (function() {
   function initializeManageBacklog() {
     // validate signup form on keyup and submit
     var frm = $("form#new_backlog, form.edit_backlog");
-    frm.validate({
+    var validator = frm.validate({
       rules: {
         'backlog[name]': {
           required: true
@@ -16,6 +16,9 @@ App.Views.BacklogCreateUpdateMethods = (function() {
           min: 0
         },
         'backlog[velocity]': {
+          required: function() {
+            return $('input#backlog_days_estimatable_true').is(':checked') || $('#days_estimatable_true_label').hasClass('selected');
+          },
           number: true,
           min: 0.1
         }
@@ -33,6 +36,17 @@ App.Views.BacklogCreateUpdateMethods = (function() {
       success: function(label) {
         // set &nbsp; as text for IE
         label.html("&nbsp;").addClass("correct");
+      }
+    });
+
+    frm.submit(function(event) {
+      var velocityField = $('input#backlog_velocity'),
+          shouldRequireVelocity = $('input#backlog_days_estimatable_true').is(':checked') || $('#days_estimatable_true_label').hasClass('selected');
+
+      if (shouldRequireVelocity && $.trim(velocityField.val()) === '') {
+        validator.element(velocityField);
+        event.preventDefault();
+        return false;
       }
     });
 
@@ -117,7 +131,7 @@ App.Views.BacklogCreateUpdateMethods = (function() {
     if (!isEditingBacklog()) {
       $('input#backlog_rate').val($('input#backlog_rate').data('default'));
       $('input#backlog_velocity').val($('input#backlog_velocity').data('default'));
-      $('input#backlog_use_50_90').attr('checked', $('input#backlog_use_50_90').data('default'));
+      $('input#backlog_use_50_90').prop('checked', $('input#backlog_use_50_90').data('default'));
       // show cost estimate options if previously used for this company
       if (!firstCall) { resetEstimatableVisibility(); }
     }
@@ -131,7 +145,7 @@ App.Views.BacklogCreateUpdateMethods = (function() {
       $.getJSON('/accounts/' + account_ID[1] + '/companies/' + selected + '.json', {}, function(data) {
         $('input#backlog_rate').val(data.default_rate);
         $('input#backlog_velocity').val(data.default_velocity);
-        $('input#backlog_use_50_90').attr('checked', data.default_use_50_90);
+        $('input#backlog_use_50_90').prop('checked', data.default_use_50_90);
         // show cost estimate options if previously used for this company
         if (!firstCall) { resetEstimatableVisibility(); }
       });
@@ -140,9 +154,9 @@ App.Views.BacklogCreateUpdateMethods = (function() {
 
   function resetEstimatableVisibility() {
     if ($('input#backlog_velocity').val()) {
-      $('input#backlog_days_estimatable_true').attr('checked', true);
+      $('input#backlog_days_estimatable_true').prop('checked', true);
     } else {
-      $('input#backlog_days_estimatable_false').attr('checked', true);
+      $('input#backlog_days_estimatable_false').prop('checked', true);
     }
     setDaysEstimatableVisibility();
   }

@@ -1,19 +1,12 @@
-# docker-compose.example.yml
-# 
-# This is a ready-to-use docker-compose.yml for running easyBacklog
-# published on Docker Hub. Users should copy this file and configure
-# the .env file with their preferences.
+# easyBacklog Runtime Docker Compose (Release Artifact)
+# ==============================================================================
+# Upload this file as a GitHub Release asset named docker-compose.yml.
+# On the target machine, no -f flag is required.
 #
 # Usage:
-#   1. Copy this file to docker-compose.yml or use as-is with -f flag
-#   2. Copy .env.example to .env and configure as needed
-#   3. Run: docker-compose up -d
-#   4. Open: http://localhost:3000
-#
-# To use a different Docker Hub image, update the 'image' field below
-# with your preferred tag (e.g., 'myusername/easybacklog:v1.0')
-
-version: '3.8'
+# 1) docker compose pull
+# 2) docker compose up -d
+# ==============================================================================
 
 services:
   db:
@@ -25,7 +18,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -35,7 +28,7 @@ services:
   redis:
     image: redis:5-alpine
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -44,15 +37,12 @@ services:
       timeout: 3s
       retries: 5
 
-  # easyBacklog application from Docker Hub
-  # For development/local building, use the Dockerfile in the repository instead
   web:
-    image: ${DOCKER_IMAGE:-mattanmr/easybacklog:latest}
-    env_file:
-      - .env
-    command: bash -c "bundle exec rake db:schema:load 2>/dev/null || true && bundle exec rails server -b 0.0.0.0"
+    platform: linux/amd64
+    image: mattanmr/easybacklog-web:v1.0.0
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
     ports:
-      - "${WEB_PORT:-3000}:3000"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
@@ -61,14 +51,15 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: ${RAILS_ENV:-development}
+      RAILS_ENV: development
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
     stdin_open: true
     tty: true
 
   sidekiq:
-    image: ${DOCKER_IMAGE:-mattanmr/easybacklog:latest}
-    env_file:
-      - .env
+    platform: linux/amd64
+    image: mattanmr/easybacklog-sidekiq:v1.0.0
     command: bundle exec sidekiq
     depends_on:
       db:
@@ -78,7 +69,9 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
       REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: ${RAILS_ENV:-development}
+      RAILS_ENV: development
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
 
 volumes:
   postgres_data:
