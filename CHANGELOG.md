@@ -75,3 +75,4 @@ The application now works fully offline.
 	- `FONTS_DOMAIN` fallback: `//#{config.dns}`
 - Updated `config/heroku.yml` default `app_url` to `http://localhost:3000`
 - Updated demo API helper/spec fixtures from `demo-api@easybacklog.com` to `demo-api@localhost.test`
+- Fixed API documentation links to use `api_root_path` (instead of `api_path`) to prevent `No route matches stories#show_without_theme_id` errors on FAQ/contact/auth pages
