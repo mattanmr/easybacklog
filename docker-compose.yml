@@ -67,7 +67,7 @@ services:
   # - Environment variables configure database and Redis connections
   web:
     platform: linux/amd64          # PhantomJS used by Poltergeist is only available for x86_64
-    image: mattanmr/easybacklog-web:latest  # Use prebuilt image from Docker Hub
+    build: .                         # Build from Dockerfile in current directory
     env_file:
       - .env                         # Load environment variables from .env file
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
@@ -111,7 +111,7 @@ services:
   # Jobs are queued in Redis and processed by this worker.
   sidekiq:
     platform: linux/amd64          # Keep worker image aligned with the web image build architecture
-    image: mattanmr/easybacklog-sidekiq:latest  # Use prebuilt image from Docker Hub
+    build: .                         # Same image as web service
     env_file:
       - .env
     command: bundle exec sidekiq     # Start Sidekiq worker process

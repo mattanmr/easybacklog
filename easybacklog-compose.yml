@@ -1,0 +1,78 @@
+# easyBacklog Runtime Docker Compose (Release Artifact)
+# ==============================================================================
+# This file is intended for pull-and-run usage on any machine without cloning
+# the repository or building images locally.
+#
+# Usage:
+# 1) docker compose -f easybacklog-compose.yml pull
+# 2) docker compose -f easybacklog-compose.yml up -d
+# ==============================================================================
+
+services:
+  db:
+    image: postgres:11
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: easybacklog_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:5-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  web:
+    platform: linux/amd64
+    image: mattanmr/easybacklog-web:v1.0.0
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
+    stdin_open: true
+    tty: true
+
+  sidekiq:
+    platform: linux/amd64
+    image: mattanmr/easybacklog-sidekiq:v1.0.0
+    command: bundle exec sidekiq
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
+
+volumes:
+  postgres_data:
+  redis_data:
