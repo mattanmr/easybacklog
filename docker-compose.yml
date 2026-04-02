@@ -66,6 +66,7 @@ services:
   # - Volume mount allows live code reloading during development
   # - Environment variables configure database and Redis connections
   web:
+    platform: linux/amd64          # PhantomJS used by Poltergeist is only available for x86_64
     build: .                         # Build from Dockerfile in current directory
     env_file:
       - .env                         # Load environment variables from .env file
@@ -109,6 +110,7 @@ services:
   # It uses the same codebase as 'web' but runs a different command.
   # Jobs are queued in Redis and processed by this worker.
   sidekiq:
+    platform: linux/amd64          # Keep worker image aligned with the web image build architecture
     build: .                         # Same image as web service
     env_file:
       - .env

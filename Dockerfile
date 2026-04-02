@@ -13,6 +13,7 @@ FROM ruby:2.6.10-bullseye
 # ------------------------------------------------
 # postgresql-client: Required for database interactions
 # nodejs & npm: Required for asset pipeline and JavaScript runtime
+# phantomjs-prebuilt: Provides the PhantomJS binary needed by Poltergeist/Cucumber
 # git: Needed for gems that install from git repositories
 # build-essential: Provides gcc, g++, make for compiling native gem extensions
 # libpq-dev: PostgreSQL development headers for the 'pg' gem
@@ -65,6 +66,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt1-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Install PhantomJS for JS-enabled feature specs
+# ------------------------------------------------
+# Poltergeist depends on a PhantomJS executable being present on PATH.
+# Debian Bullseye no longer ships a PhantomJS package, so install the prebuilt
+# binary through npm and make it available globally inside the image.
+RUN npm install -g phantomjs-prebuilt@2.1.16
+
+# PhantomJS 2.1.1 crashes loading the default OpenSSL config in this image.
+# Clearing OPENSSL_CONF keeps the JS test driver bootable for Poltergeist.
+ENV OPENSSL_CONF=/dev/null
 
 # Install Ruby Gems
 # ------------------------------------------------

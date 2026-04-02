@@ -111,8 +111,17 @@ class Backlog < ActiveRecord::Base
       :en
     end
 
-    normalized = code.to_s.gsub('_', '-').split('-').first.to_sym
-    I18n.available_locales.include?(normalized) ? normalized : :en
+    normalized_code = code.to_s.gsub('_', '-')
+    normalized = normalized_code.to_sym
+    fallback = normalized_code.split('-').first.to_sym
+
+    if I18n.available_locales.include?(normalized)
+      normalized
+    elsif I18n.available_locales.include?(fallback)
+      fallback
+    else
+      :en
+    end
   end
 
   def normalized_locale_string

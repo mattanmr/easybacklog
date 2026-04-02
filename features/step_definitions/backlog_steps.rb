@@ -349,6 +349,15 @@ When /^the (.* story)(| within the .* theme) should (not be assigned to a sprint
   else
     script = %{$('#{story_selector} a[href="##{sprint_iteration}"]').length > 0}
   end
+  begin
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      loop do
+        break if page.evaluate_script(script)
+        sleep 0.1
+      end
+    end
+  rescue Timeout::Error
+  end
   page.evaluate_script(script).should be_true
 end
 

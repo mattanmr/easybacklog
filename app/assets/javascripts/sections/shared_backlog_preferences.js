@@ -35,7 +35,7 @@ App.Views.Shared = {
     // although no estimates is selected, this is based on a brand new account, so lets ensure we enable estimates even if the velocity is blank
     if (!haveSuggestedEstimates && frm.find('input#' + namespace + '_days_estimatable_false').is(':checked')) {
       if (_.include(['','false','f'], frm.find('input#account_defaults_set').val())) {
-        $('input#' + namespace + '_days_estimatable_true').attr('checked', true);
+        $('input#' + namespace + '_days_estimatable_true').prop('checked', true);
         haveSuggestedEstimates = true;
       }
     }
