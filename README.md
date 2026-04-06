@@ -103,6 +103,51 @@ Copy `.env.example` to `.env` to customize settings (done in setup above).
 
 All external services (SendGrid, Ably, New Relic) are disabled by default. The application works fully offline. See `.env.example` for details on enabling them.
 
+## Standalone Release (Pull & Run)
+
+A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog without cloning the repo. It pulls pre-built images from Docker Hub. See [RELEASE_NOTES_RUNTIME.md](RELEASE_NOTES_RUNTIME.md) for end-user instructions.
+
+### Publishing a New Release
+
+1. Make your code changes and commit them.
+2. Build, tag, and push the images:
+   ```powershell
+   docker compose build web sidekiq
+   docker tag easybacklog-web:latest mattanmr/easybacklog-web:v1.0.2
+   docker tag easybacklog-web:latest mattanmr/easybacklog-web:latest
+   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:v1.0.2
+   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:latest
+   docker push mattanmr/easybacklog-web:v1.0.2
+   docker push mattanmr/easybacklog-web:latest
+   docker push mattanmr/easybacklog-sidekiq:v1.0.2
+   docker push mattanmr/easybacklog-sidekiq:latest
+   ```
+3. Run the release E2E test to validate:
+   ```powershell
+   .\scripts\test-release-compose.ps1
+   ```
+4. If all 28 tests pass, the release is good. Commit and push.
+
+### Release E2E Test
+
+`scripts/test-release-compose.ps1` simulates an end-user experience from scratch:
+
+- Copies the release compose file to an isolated temp directory
+- Pulls images from Docker Hub, starts all services
+- Initializes the database (schema, seeds, sample data)
+- Runs smoke tests (home page, health endpoint)
+- Tests authentication (sign in, session, dashboard)
+- Tests API CRUD (list, create, read, delete backlogs)
+- Verifies Sidekiq is running and connected to Redis
+- Tests data persistence across a full restart
+
+The script uses an isolated Docker Compose project name (`easybacklog-release-test`) so it never interferes with the development environment.
+
+Use `-SkipCleanup` to keep containers running after the test for debugging:
+```powershell
+.\scripts\test-release-compose.ps1 -SkipCleanup
+```
+
 ## License
 
 [MIT](./LICENSE)
