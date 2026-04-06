@@ -2,6 +2,10 @@
 
 This release includes a single-file Docker Compose setup for pull-and-run usage.
 
+## Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
 ## Download one file
 
 Download `docker-compose.yml` from this release.
@@ -27,9 +31,31 @@ Demo credentials:
 - Email: demo@example.com
 - Password: password123
 
+## Configuration (optional)
+
+The app works out of the box with built-in defaults. To customize, set environment variables before running `docker compose up`:
+
+| Variable | Default | Purpose |
+|----------|---------|----------|
+| `SECRET_TOKEN` | `demo_secret_token` | Rails session secret. Set a unique random value for non-demo use |
+| `DEVISE_PEPPER` | `demo_devise_pepper` | Password hashing pepper. Must stay consistent once users are created |
+| `DB_PASSWORD` | `password` | PostgreSQL password |
+
+Example (Linux/macOS):
+```bash
+export SECRET_TOKEN=$(openssl rand -hex 64)
+docker compose up -d
+```
+
+Example (Windows PowerShell):
+```powershell
+$env:SECRET_TOKEN = -join ((1..64) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) })
+docker compose up -d
+```
+
 ## Persistence
 
-Database data is persisted in Docker volume `postgres_data` and survives restarts.
+Data is persisted in Docker volumes (`postgres_data`, `redis_data`) and survives restarts.
 Data is deleted only if you run:
 
 ```bash
