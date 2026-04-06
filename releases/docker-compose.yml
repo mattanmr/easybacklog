@@ -1,0 +1,92 @@
+# easyBacklog Runtime Docker Compose (Release Artifact)
+# ==============================================================================
+# Upload this file as a GitHub Release asset named docker-compose.yml.
+# On the target machine, no -f flag is required.
+#
+# Usage:
+# 1) docker compose pull
+# 2) docker compose up -d
+# ==============================================================================
+
+services:
+  db:
+    image: postgres:11
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: easybacklog_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d easybacklog_development"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  redis:
+    image: redis:5-alpine
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  web:
+    platform: linux/amd64
+    image: mattanmr/easybacklog-web:latest
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_USERNAME: postgres
+      DB_HOST: db
+      DB_PORT: "5432"
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      FOREMAN: "true"
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token_please_change_this_in_production}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper_please_change_this_in_production}
+    healthcheck:
+      test: ["CMD-SHELL", "ruby -e \"require 'socket'; TCPSocket.new('localhost', 3000).close\""]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 30s
+    stdin_open: true
+    tty: true
+
+  sidekiq:
+    platform: linux/amd64
+    image: mattanmr/easybacklog-sidekiq:latest
+    command: bundle exec sidekiq
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-password}@db:5432/easybacklog_development
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_USERNAME: postgres
+      DB_HOST: db
+      DB_PORT: "5432"
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      FOREMAN: "true"
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token_please_change_this_in_production}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper_please_change_this_in_production}
+
+volumes:
+  postgres_data:
+  redis_data:

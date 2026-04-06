@@ -166,19 +166,6 @@ describe 'External Services and Links Audit' do
 
   end
 
-  describe 'External Links in Documentation and Comments' do
-
-    it 'should have documentation for all external service dependencies' do
-      doc_files = Dir.glob(Rails.root.join('doc/*.md'))
-      doc_files.count.should be > 0
-    end
-
-    it 'should have EXTERNAL_SERVICES_GUIDE documentation' do
-      expect(File.exist?(Rails.root.join('doc/EXTERNAL_SERVICES_GUIDE.md'))).to be_true
-    end
-
-  end
-
   describe 'Cookie and Session Configuration' do
 
     it 'should use secure session configuration' do

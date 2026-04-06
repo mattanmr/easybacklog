@@ -1,7 +1,7 @@
-# Sample Data Seed for Learning and Experimentation
+# Sample Data Seed
 # ==============================================================================
-# This file creates sample data to help students explore easyBacklog's features.
-# Run this after db:seed to populate the database with example data:
+# Creates demo data for easyBacklog (user, account, backlog, themes, stories).
+# Run this after db:seed to populate the database:
 #
 #   docker compose exec web bundle exec rake db:seed:sample
 #
@@ -126,7 +126,6 @@ else
   # Helper method to create stories properly
   def create_story(backlog, theme, attrs)
     story = Story.new(attrs.except(:backlog, :theme))
-    story.backlog_id = backlog.id
     story.theme_id = theme.id
     story.save!
     story
@@ -138,7 +137,6 @@ else
   auth_theme = themes[0]
   
   stories << create_story(backlog, auth_theme, {
-    unique_id: 'AUT-1',
     as_a: 'Customer',
     i_want_to: 'create an account',
     so_i_can: 'save my information for future purchases',
@@ -148,7 +146,6 @@ else
   })
   
   stories << create_story(backlog, auth_theme, {
-    unique_id: 'AUT-2',
     as_a: 'Customer',
     i_want_to: 'log in to my account',
     so_i_can: 'access my order history and saved addresses',
@@ -161,7 +158,6 @@ else
   prod_theme = themes[1]
   
   stories << create_story(backlog, prod_theme, {
-    unique_id: 'PRD-1',
     as_a: 'Customer',
     i_want_to: 'browse products by category',
     so_i_can: 'find items I am interested in',
@@ -171,7 +167,6 @@ else
   })
   
   stories << create_story(backlog, prod_theme, {
-    unique_id: 'PRD-2',
     as_a: 'Customer',
     i_want_to: 'search for products by keyword',
     so_i_can: 'quickly find specific items',
@@ -184,7 +179,6 @@ else
   cart_theme = themes[2]
   
   stories << create_story(backlog, cart_theme, {
-    unique_id: 'CRT-1',
     as_a: 'Customer',
     i_want_to: 'add items to my cart',
     so_i_can: 'purchase multiple products at once',
@@ -194,7 +188,6 @@ else
   })
   
   stories << create_story(backlog, cart_theme, {
-    unique_id: 'CRT-2',
     as_a: 'Customer',
     i_want_to: 'update quantities in my cart',
     so_i_can: 'buy the right amount of each product',
@@ -207,7 +200,6 @@ else
   pay_theme = themes[3]
   
   stories << create_story(backlog, pay_theme, {
-    unique_id: 'PAY-1',
     as_a: 'Customer',
     i_want_to: 'enter my shipping address',
     so_i_can: 'receive my order',
@@ -217,7 +209,6 @@ else
   })
   
   stories << create_story(backlog, pay_theme, {
-    unique_id: 'PAY-2',
     as_a: 'Customer',
     i_want_to: 'pay securely with my credit card',
     so_i_can: 'complete my purchase',
@@ -231,12 +222,12 @@ else
   # Create a sprint with some stories
   # ==========================================================================
   sprint = Sprint.new(
+    start_on: Date.today,
     number_team_members: 3,
-    duration_days: 14
+    duration_days: 14,
+    explicit_velocity: 40
   )
   sprint.backlog_id = backlog.id
-  sprint.name = 'Sprint 1 - MVP'
-  sprint.position = 1
   sprint.save!
   
   # Add first 3 stories to sprint

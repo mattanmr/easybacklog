@@ -12,7 +12,7 @@ else
     :authentication => :plain,
     :user_name      => ENV['SENDGRID_USERNAME'],
     :password       => ENV['SENDGRID_PASSWORD'],
-    :domain         => 'easybacklog.com'
+    :domain         => ENV.fetch('MAIL_DOMAIN', 'localhost')
   }
   ActionMailer::Base.delivery_method = :smtp
 end

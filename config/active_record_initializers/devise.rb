@@ -3,7 +3,7 @@
 Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in DeviseMailer.
-  config.mailer_sender = "robot@easybacklog.com"
+  config.mailer_sender = ENV.fetch('MAILER_SENDER', 'robot@localhost.test')
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"

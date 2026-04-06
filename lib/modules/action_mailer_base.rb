@@ -1,3 +1,3 @@
 class ActionMailerBase < ActionMailer::Base
-  default :from => "easyBacklog <no-reply@easybacklog.com>"
+  default :from => ENV.fetch('DEFAULT_FROM_EMAIL', 'easyBacklog <no-reply@localhost.test>')
 end

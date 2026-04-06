@@ -1,6 +1,8 @@
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_filter '/.bundle'
+unless ENV['NO_COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter '/.bundle'
+  end
 end
 
 require 'shared_helper'

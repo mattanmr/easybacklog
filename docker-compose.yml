@@ -5,25 +5,7 @@
 # - Redis for caching and background job queuing
 # - Web server (Rails application)
 # - Sidekiq worker for background job processing
-#
-# For students: This demonstrates a typical microservices architecture
-# where each component runs in its own container but communicates over
-# a shared network.
 # ==============================================================================
-
-# Docker Compose for LOCAL DEVELOPMENT & BUILDING
-#
-# This file is for developers who want to:
-#   - Build the Docker image locally from the Dockerfile
-#   - Modify and test the application code
-#   - Publish to Docker Hub
-#
-# END USERS: Use docker-compose.example.yml instead!
-#   It references a pre-built image from Docker Hub.
-#   See QUICKSTART.md for simple 3-step setup.
-#
-# Developers: After building, see doc/DOCKER_BUILD_GUIDE.md
-#   for publishing to Docker Hub.
 
 services:
   # Database Service (PostgreSQL 11)
@@ -84,6 +66,7 @@ services:
   # - Volume mount allows live code reloading during development
   # - Environment variables configure database and Redis connections
   web:
+    platform: linux/amd64          # PhantomJS used by Poltergeist is only available for x86_64
     build: .                         # Build from Dockerfile in current directory
     env_file:
       - .env                         # Load environment variables from .env file
@@ -127,6 +110,7 @@ services:
   # It uses the same codebase as 'web' but runs a different command.
   # Jobs are queued in Redis and processed by this worker.
   sidekiq:
+    platform: linux/amd64          # Keep worker image aligned with the web image build architecture
     build: .                         # Same image as web service
     env_file:
       - .env
@@ -166,5 +150,5 @@ volumes:
 # Stop all services:      docker compose down
 # Reset everything:       docker compose down -v
 # 
-# For more commands, see: doc/DOCKER_GUIDE.md
+# Run 'make help' for the full command list.
 # ==============================================================================
