@@ -4,7 +4,14 @@ This release includes a single-file Docker Compose setup for pull-and-run usage.
 
 ## Prerequisites
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/macOS) or [Docker Engine](https://docs.docker.com/engine/install/) (Linux)
+
+**Linux only:** After installing Docker, add your user to the `docker` group to avoid permission errors, then log out and back in:
+```bash
+sudo usermod -aG docker $USER
+# Log out and log back in, then verify:
+groups  # should include 'docker'
+```
 
 ## Download one file
 
