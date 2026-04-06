@@ -27,10 +27,27 @@ cd easybacklog
 cp .env.example .env
 ```
 
-Then set `SECRET_TOKEN` in `.env` with a randomly-generated value:
+Then set `SECRET_TOKEN` in `.env` with a randomly-generated value.
+
+**Option A — OS-agnostic (uses Docker, already installed):**
 
 ```bash
+docker run --rm ruby:2.6 ruby -e "require 'securerandom'; puts SecureRandom.hex(64)"
+```
+
+Copy the output and paste it after `SECRET_TOKEN=` in your `.env` file.
+
+**Option B — OS-specific one-liners:**
+
+Linux / macOS (Bash):
+```bash
 sed -i "s/^SECRET_TOKEN=$/SECRET_TOKEN=$(openssl rand -hex 64)/" .env
+```
+
+Windows (PowerShell):
+```powershell
+$token = -join ((1..64) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) }); `
+  (Get-Content .env) -replace '^SECRET_TOKEN=$', "SECRET_TOKEN=$token" | Set-Content .env
 ```
 
 If left empty, a token is auto-generated on every container restart — which invalidates all sessions. Setting it once keeps you logged in across restarts.
