@@ -17,25 +17,23 @@ services:
       POSTGRES_DB: easybacklog_development
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d easybacklog_development"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 15s
 
   redis:
     image: redis:5-alpine
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 10s
 
   web:
     platform: linux/amd64
@@ -59,6 +57,12 @@ services:
       FOREMAN: "true"
       SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
       DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
+    healthcheck:
+      test: ["CMD-SHELL", "ruby -e \"require 'socket'; TCPSocket.new('localhost', 3000).close\""]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 30s
     stdin_open: true
     tty: true
 
