@@ -55,8 +55,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
       FOREMAN: "true"
-      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
-      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token_please_change_this_in_production}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper_please_change_this_in_production}
     healthcheck:
       test: ["CMD-SHELL", "ruby -e \"require 'socket'; TCPSocket.new('localhost', 3000).close\""]
       interval: 10s
@@ -84,8 +84,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
       FOREMAN: "true"
-      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token}
-      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper}
+      SECRET_TOKEN: ${SECRET_TOKEN:-demo_secret_token_please_change_this_in_production}
+      DEVISE_PEPPER: ${DEVISE_PEPPER:-demo_devise_pepper_please_change_this_in_production}
 
 volumes:
   postgres_data:

@@ -44,8 +44,8 @@ The app works out of the box with built-in defaults. To customize, set environme
 
 | Variable | Default | Purpose |
 |----------|---------|----------|
-| `SECRET_TOKEN` | `demo_secret_token` | Rails session secret. Set a unique random value for non-demo use |
-| `DEVISE_PEPPER` | `demo_devise_pepper` | Password hashing pepper. Must stay consistent once users are created |
+| `SECRET_TOKEN` | `demo_secret_token_please_change_this_in_production` | Rails session secret. Must be ≥30 characters. Set a unique random value for non-demo use |
+| `DEVISE_PEPPER` | `demo_devise_pepper_please_change_this_in_production` | Password hashing pepper. Must be ≥30 characters and stay consistent once users are created |
 | `DB_PASSWORD` | `password` | PostgreSQL password |
 
 Example (Linux/macOS):
