@@ -1,4 +1,4 @@
-# easyBacklog Runtime Compose (v1.0.0)
+# easyBacklog Runtime Compose (v1.0.2)
 
 This release includes a single-file Docker Compose setup for pull-and-run usage.
 

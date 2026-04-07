@@ -117,17 +117,23 @@ A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog wit
 ### Publishing a New Release
 
 1. Make your code changes and commit them.
-2. Build, tag, and push the images:
-   ```powershell
-   docker compose build web sidekiq
-   docker tag easybacklog-web:latest mattanmr/easybacklog-web:v1.0.2
-   docker tag easybacklog-web:latest mattanmr/easybacklog-web:latest
-   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:v1.0.2
-   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:latest
-   docker push mattanmr/easybacklog-web:v1.0.2
-   docker push mattanmr/easybacklog-web:latest
-   docker push mattanmr/easybacklog-sidekiq:v1.0.2
-   docker push mattanmr/easybacklog-sidekiq:latest
+2. Create a multi-arch buildx builder (one-time setup):
+   ```bash
+   docker buildx create --name multiarch --use
+   ```
+3. Build and push multi-arch images (amd64 + arm64):
+   ```bash
+   docker buildx build --platform linux/amd64,linux/arm64 \
+     --tag mattanmr/easybacklog-web:v1.0.3 \
+     --tag mattanmr/easybacklog-web:latest --push .
+   docker buildx build --platform linux/amd64,linux/arm64 \
+     --tag mattanmr/easybacklog-sidekiq:v1.0.3 \
+     --tag mattanmr/easybacklog-sidekiq:latest --push .
+   ```
+4. Verify the manifests include both platforms:
+   ```bash
+   docker buildx imagetools inspect mattanmr/easybacklog-web:v1.0.2
+   docker buildx imagetools inspect mattanmr/easybacklog-sidekiq:v1.0.2
    ```
 3. Run the release E2E test to validate:
    ```powershell
