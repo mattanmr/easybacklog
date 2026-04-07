@@ -57,6 +57,14 @@ The application now works fully offline.
 - Implemented 6 RSpec spec files covering functionality, database integrity, frontend integration, external services isolation, and security
 - Run with `docker compose exec web bundle exec rspec` (RSpec) or `docker compose exec web bundle exec cucumber` (Cucumber)
 
+## Multi-Architecture Support (2026-04-07)
+
+- Removed PhantomJS and npm from the Dockerfile — PhantomJS was only needed for Poltergeist/Cucumber and was amd64-only
+- Removed `platform: linux/amd64` constraints from both dev and release docker-compose files
+- Docker images now published as multi-arch manifests (linux/amd64 + linux/arm64)
+- Native ARM64 support — no more emulation overhead on Apple Silicon or ARM servers
+- Updated README publishing instructions to use `docker buildx` for multi-arch builds
+
 ## External Link and Mail Domain Cleanup (2026-04-02)
 
 - Removed remaining hardcoded external easybacklog URLs from runtime-facing views (contact, FAQ, API docs, API access, and top navigation)

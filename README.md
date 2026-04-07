@@ -117,27 +117,37 @@ A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog wit
 ### Publishing a New Release
 
 1. Make your code changes and commit them.
-2. Build, tag, and push the images:
-   ```powershell
-   docker compose build web sidekiq
-   docker tag easybacklog-web:latest mattanmr/easybacklog-web:v1.0.2
-   docker tag easybacklog-web:latest mattanmr/easybacklog-web:latest
-   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:v1.0.2
-   docker tag easybacklog-sidekiq:latest mattanmr/easybacklog-sidekiq:latest
-   docker push mattanmr/easybacklog-web:v1.0.2
-   docker push mattanmr/easybacklog-web:latest
-   docker push mattanmr/easybacklog-sidekiq:v1.0.2
-   docker push mattanmr/easybacklog-sidekiq:latest
+2. Create a multi-arch buildx builder (one-time setup):
+   ```bash
+   docker buildx create --name multiarch --use
    ```
-3. Run the release E2E test to validate:
-   ```powershell
+3. Build and push multi-arch images (amd64 + arm64), replacing `<VERSION>` with the new tag:
+   ```bash
+   docker buildx build --platform linux/amd64,linux/arm64 \
+     --tag mattanmr/easybacklog-web:<VERSION> \
+     --tag mattanmr/easybacklog-web:latest --push .
+   docker buildx build --platform linux/amd64,linux/arm64 \
+     --tag mattanmr/easybacklog-sidekiq:<VERSION> \
+     --tag mattanmr/easybacklog-sidekiq:latest --push .
+   ```
+4. Verify the manifests include both platforms:
+   ```bash
+   docker buildx imagetools inspect mattanmr/easybacklog-web:<VERSION>
+   docker buildx imagetools inspect mattanmr/easybacklog-sidekiq:<VERSION>
+   ```
+5. Run the release E2E test to validate:
+   ```bash
+   # macOS / Linux
+   ./scripts/test-release-compose.sh
+
+   # Windows (PowerShell)
    .\scripts\test-release-compose.ps1
    ```
-4. If all 28 tests pass, the release is good. Commit and push.
+6. If all 28 tests pass, the release is good. Commit and push.
 
 ### Release E2E Test
 
-`scripts/test-release-compose.ps1` simulates an end-user experience from scratch:
+`scripts/test-release-compose.sh` (macOS/Linux) and `scripts/test-release-compose.ps1` (Windows) simulate an end-user experience from scratch:
 
 - Copies the release compose file to an isolated temp directory
 - Pulls images from Docker Hub, starts all services
@@ -150,8 +160,12 @@ A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog wit
 
 The script uses an isolated Docker Compose project name (`easybacklog-release-test`) so it never interferes with the development environment.
 
-Use `-SkipCleanup` to keep containers running after the test for debugging:
-```powershell
+To keep containers running after the test for debugging:
+```bash
+# macOS / Linux
+./scripts/test-release-compose.sh --skip-cleanup
+
+# Windows (PowerShell)
 .\scripts\test-release-compose.ps1 -SkipCleanup
 ```
 
