@@ -17,14 +17,12 @@ groups  # should include 'docker'
 
 Download `docker-compose.yml` from this release.
 
-## Start on another machine
+## Start on desired machine
 
 ```bash
 docker compose pull
 docker compose up -d
 ```
-
-Open the app at http://localhost:3000
 
 ## One-time database initialization (first run only)
 
@@ -33,6 +31,10 @@ docker compose exec web bundle exec rake db:schema:load
 docker compose exec web bundle exec rake db:seed
 docker compose exec web bundle exec rake db:seed:sample
 ```
+
+
+Open the app at http://localhost:3000
+
 
 Demo credentials:
 - Email: demo@example.com
