@@ -2,6 +2,25 @@
 
 Changes made since forking from the original easyBacklog repository.
 
+## Improved Release Documentation and Setup Scripts (2026-05-30)
+
+- Added `releases/setup.sh` (Linux/macOS) and `releases/setup.ps1` (Windows) — one-shot
+  setup scripts that handle every step: create a working directory, download
+  `docker-compose.yml`, generate a `.env` file with secure random tokens, pull images,
+  start services, wait for the web server, and initialise the database
+- Overhauled `RELEASE_NOTES_RUNTIME.md`:
+  - Added "Option A — Automated setup" section with the one-command install for each OS
+  - Added "Option B — Manual setup" with numbered steps (was previously fragmented prose)
+  - Added explicit `mkdir easybacklog && cd easybacklog` and `curl`/`Invoke-WebRequest`
+    download commands — previously the user was told to "download one file" with no
+    command shown, and running `docker compose up -d` without being in the right
+    directory would fail
+  - Added a dedicated `.env` file section explaining what the file is, why it is needed,
+    and how to generate it — previously configuration was only documented as ephemeral
+    `export` commands that don't survive terminal sessions
+  - Moved the environment variable reference table into the `.env` section where it is
+    actionable
+
 The original easyBacklog service (easybacklog.com) shut down on September 30, 2022, after serving ~400k backlogs by 55k+ users. The codebase was open-sourced under MIT by its creator, [Matthew O'Riordan](https://mattheworiordan.com). This fork makes it runnable locally via Docker.
 
 ## Docker Containerization
