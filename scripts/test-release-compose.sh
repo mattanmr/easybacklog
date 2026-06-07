@@ -41,6 +41,7 @@ SECONDS=0  # bash built-in timer
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RELEASE_COMPOSE="$REPO_ROOT/releases/docker-compose.yml"
+RELEASE_ENV="$REPO_ROOT/releases/.env"
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/easybacklog-release-test.XXXXXXXX")"
 
 # Cookie jar for session-based tests
@@ -166,17 +167,27 @@ trap trap_cleanup EXIT
 # ═════════════════════════════════════════════════════════════════════════
 phase "PHASE 1: Setup & Isolation"
 
-# 1. Create temp dir & copy release compose file
+# 1. Create temp dir & copy release files (compose + .env)
 cp "$RELEASE_COMPOSE" "$TEMP_DIR/docker-compose.yml"
-test_result "Copy release compose to temp dir" \
-  "$([[ -f "$TEMP_DIR/docker-compose.yml" ]] && echo true || echo false)"
+cp "$RELEASE_ENV" "$TEMP_DIR/.env"
+test_result "Copy release compose and .env to temp dir" \
+  "$([[ -f "$TEMP_DIR/docker-compose.yml" && -f "$TEMP_DIR/.env" ]] && echo true || echo false)"
 
-# 2-3. Set env vars
-export SECRET_TOKEN=$(openssl rand -hex 64)
-export DEVISE_PEPPER=$(openssl rand -hex 32)
-export DB_PASSWORD="testpass_$RANDOM"
-test_result "Environment variables set" \
-  "$([[ -n "$SECRET_TOKEN" ]] && echo true || echo false)"
+# 2. Write test-specific values into .env (isolates this run from the defaults)
+TEST_SECRET_TOKEN=$(openssl rand -hex 64)
+TEST_DEVISE_PEPPER=$(openssl rand -hex 32)
+TEST_DB_PASSWORD="testpass_$RANDOM"
+if sed --version &>/dev/null 2>&1; then
+  sed -i "s|^SECRET_TOKEN=.*|SECRET_TOKEN=${TEST_SECRET_TOKEN}|" "$TEMP_DIR/.env"
+  sed -i "s|^DEVISE_PEPPER=.*|DEVISE_PEPPER=${TEST_DEVISE_PEPPER}|" "$TEMP_DIR/.env"
+  sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${TEST_DB_PASSWORD}|" "$TEMP_DIR/.env"
+else
+  sed -i '' "s|^SECRET_TOKEN=.*|SECRET_TOKEN=${TEST_SECRET_TOKEN}|" "$TEMP_DIR/.env"
+  sed -i '' "s|^DEVISE_PEPPER=.*|DEVISE_PEPPER=${TEST_DEVISE_PEPPER}|" "$TEMP_DIR/.env"
+  sed -i '' "s|^DB_PASSWORD=.*|DB_PASSWORD=${TEST_DB_PASSWORD}|" "$TEMP_DIR/.env"
+fi
+test_result "Write test-specific values to .env" \
+  "$(grep -q "^SECRET_TOKEN=${TEST_SECRET_TOKEN}$" "$TEMP_DIR/.env" && echo true || echo false)"
 
 cd "$TEMP_DIR"
 
@@ -454,8 +465,8 @@ cleanup
 # Disable the EXIT trap since we already cleaned up
 trap - EXIT
 
-# Unset env vars
-unset SECRET_TOKEN DEVISE_PEPPER DB_PASSWORD 2>/dev/null || true
+# Clean up test variables
+unset TEST_SECRET_TOKEN TEST_DEVISE_PEPPER TEST_DB_PASSWORD 2>/dev/null || true
 
 # ── Summary ──────────────────────────────────────────────────────────────
 elapsed=$SECONDS
