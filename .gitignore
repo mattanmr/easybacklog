@@ -12,6 +12,7 @@ bin
 .rvmrc
 public/assets
 .env
+!releases/.env
 /coverage
 docker-compose.override.yml
 /.idea
