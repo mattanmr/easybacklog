@@ -91,21 +91,28 @@ function Ensure-Files {
 function Wait-AppHealthy {
     $timeout = 180
     $elapsed = 0
-    Write-Info "Waiting for services to become healthy (up to ${timeout}s)..."
+    Write-Info "Waiting for Rails to start (up to ${timeout}s)..."
     while ($elapsed -lt $timeout) {
+        # Check TCP port 3000 -- same check the container healthcheck uses.
+        # Do NOT check /status here; it requires the DB schema which isn't loaded yet.
+        $tcp = $null
         try {
-            $resp = Invoke-WebRequest -Uri "$AppUrl/status" -UseBasicParsing -ErrorAction Stop
-            if ($resp.StatusCode -eq 200 -and $resp.Content -match 'healthy') {
-                Write-Ok "Application is ready at $AppUrl"
-                return $true
-            }
-        } catch {}
+            $tcp = New-Object System.Net.Sockets.TcpClient
+            $tcp.Connect('localhost', 3000)
+            Write-Host ''
+            Write-Ok "Rails is accepting connections at $AppUrl"
+            return $true
+        } catch {
+            $null
+        } finally {
+            if ($tcp) { $tcp.Dispose() }
+        }
         Start-Sleep -Seconds 5
         $elapsed += 5
         Write-Host '.' -NoNewline
     }
     Write-Host ''
-    Write-Err 'Timed out waiting for the application to become healthy.'
+    Write-Err 'Timed out waiting for Rails to start.'
     Write-Host "  Run 'docker compose logs web' to diagnose." -ForegroundColor White
     return $false
 }

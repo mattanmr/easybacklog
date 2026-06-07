@@ -99,10 +99,13 @@ ensure_files() {
 wait_healthy() {
   local timeout=180
   local elapsed=0
-  info "Waiting for services to become healthy (up to ${timeout}s)..."
+  info "Waiting for Rails to start (up to ${timeout}s)..."
   while [[ $elapsed -lt $timeout ]]; do
-    if curl -sf "${APP_URL}/status" 2>/dev/null | grep -qi "healthy"; then
-      success "Application is ready at ${APP_URL}"
+    # Check TCP port 3000 — same check the container healthcheck uses.
+    # Do NOT check /status here; it requires the DB schema which isn't loaded yet.
+    if (echo > /dev/tcp/localhost/3000) 2>/dev/null; then
+      echo ""
+      success "Rails is accepting connections at ${APP_URL}"
       return 0
     fi
     sleep 5
@@ -110,7 +113,7 @@ wait_healthy() {
     echo -n "."
   done
   echo ""
-  error "Timed out waiting for the application to become healthy."
+  error "Timed out waiting for Rails to start."
   echo    "  Run 'docker compose logs web' to diagnose."
   return 1
 }
