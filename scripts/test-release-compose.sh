@@ -124,9 +124,29 @@ wait_services_healthy() {
   echo -n "  Waiting for services to become healthy (timeout: ${HEALTH_TIMEOUT}s)..."
   local elapsed=0
   while [[ $elapsed -lt $HEALTH_TIMEOUT ]]; do
-    if curl -sf "${BASE_URL}/status" --max-time 5 2>/dev/null | grep -qi "healthy"; then
-      echo -e " ${GREEN}ready! (${elapsed}s)${NC}"
-      return 0
+    local ps_output counts total healthy
+    ps_output=$(docker compose -p "$PROJECT_NAME" ps --format json 2>/dev/null || true)
+    if [[ -n "$ps_output" ]]; then
+      counts=$(printf '%s' "$ps_output" | python3 -c "
+import sys, json
+data = sys.stdin.read().strip()
+try:
+    objs = json.loads(data)
+    if isinstance(objs, dict): objs = [objs]
+except Exception:
+    objs = [json.loads(l) for l in data.splitlines() if l.strip()]
+total = len(objs)
+healthy = sum(1 for c in objs
+              if c.get('State') == 'running'
+              and c.get('Health', '') in ('healthy', '', 'none', None))
+print(total, healthy)
+" 2>/dev/null || echo "0 0")
+      total=$(echo "$counts" | cut -d' ' -f1)
+      healthy=$(echo "$counts" | cut -d' ' -f2)
+      if [[ "$total" -ge 4 && "$healthy" -ge 4 ]]; then
+        echo -e " ${GREEN}ready! (${elapsed}s)${NC}"
+        return 0
+      fi
     fi
     sleep 5
     elapsed=$((elapsed + 5))
