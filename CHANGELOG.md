@@ -4,6 +4,15 @@ Changes made since forking from the original easyBacklog repository.
 
 The original easyBacklog service (easybacklog.com) shut down on September 30, 2022, after serving ~400k backlogs by 55k+ users. The codebase was open-sourced under MIT by its creator, [Matthew O'Riordan](https://mattheworiordan.com). This fork makes it runnable locally via Docker.
 
+## Release UX Overhaul (v1.0.3)
+
+- Added `releases/.env` with default values so configuration persists across restarts (no more session invalidation on container restart when `SECRET_TOKEN` is unset)
+- Added `releases/manage.sh` (Linux/macOS) and `releases/manage.ps1` (Windows) — single-script setup and management with subcommands: `setup`, `start`, `stop`, `reset`, `delete`, `update`, `status`
+- `setup` checks Docker is installed and running, downloads missing release files, offers to generate a secure `SECRET_TOKEN`, starts services, detects first-run and initialises the DB, and prompts to load sample data — all with user interaction
+- Updated E2E test scripts (`scripts/test-release-compose.sh` and `.ps1`) to copy `releases/.env` to the temp directory and write test-specific values into it, matching the real user flow
+- Aligned `.env.example` comment style: marked variables as REQUIRED vs OPTIONAL, improved `SECRET_TOKEN` generation instructions
+- Updated `RELEASE_NOTES_RUNTIME.md` with single-command quick-start instructions for each OS
+
 ## Docker Containerization
 
 The original project could not be built or run — builds hung for 2+ hours due to gem compatibility issues with modern systems.
