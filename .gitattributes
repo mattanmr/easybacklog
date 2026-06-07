@@ -16,3 +16,6 @@ config.ru text eol=lf
 
 # PowerShell scripts use CRLF on Windows
 *.ps1 text eol=crlf
+
+# Vendor assets — treat as binary to prevent line-ending normalization
+vendor/** binary
