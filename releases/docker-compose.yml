@@ -1,11 +1,16 @@
 # easyBacklog Runtime Docker Compose (Release Artifact)
 # ==============================================================================
-# Upload this file as a GitHub Release asset named docker-compose.yml.
-# On the target machine, no -f flag is required.
+# This file is included in every release alongside .env, manage.sh, and
+# manage.ps1. It expects a .env file in the same directory — the manage
+# scripts create and configure it automatically.
 #
-# Usage:
-# 1) docker compose pull
-# 2) docker compose up -d
+# Quick start (recommended):
+#   Linux/macOS : chmod +x manage.sh && ./manage.sh setup
+#   Windows     : .\manage.ps1 setup
+#
+# Manual start (advanced):
+#   docker compose pull
+#   docker compose up -d
 # ==============================================================================
 
 services:
