@@ -421,7 +421,8 @@ if ($healthy2) {
             $status2 = Invoke-WebRequest -Uri "$BaseUrl/status" -UseBasicParsing `
                 -ErrorAction Stop -TimeoutSec 30
             $statusOk2 = $status2.StatusCode -eq 200 -and $status2.Content -match 'healthy'
-        } catch { $retries++ }
+        } catch {}
+        $retries++
     }
 
     # 27. /status still healthy
