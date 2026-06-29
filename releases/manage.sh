@@ -275,7 +275,44 @@ cmd_update() {
 
 cmd_status() {
   check_docker
-  docker compose ps
+  echo ""
+  echo -e "${WHITE}╔══════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${WHITE}║               easyBacklog Status                       ║${NC}"
+  echo -e "${WHITE}╠══════════════════════════════════════════════════════════╣${NC}"
+  printf  "${WHITE}║${NC}  %-12s %-14s %-12s %-12s ${WHITE}║${NC}\n" "SERVICE" "STATUS" "HEALTH" "PORTS"
+  echo -e "${WHITE}╠══════════════════════════════════════════════════════════╣${NC}"
+
+  while IFS= read -r line; do
+    local svc status health ports
+    svc=$(echo "$line" | awk '{print $1}')
+    status=$(echo "$line" | awk '{print $2}')
+    health=$(echo "$line" | awk '{print $3}')
+    ports=$(echo "$line" | awk '{print $4}')
+
+    if [[ "$status" == "running" ]]; then
+      local color="$GREEN"
+      local icon="●"
+    else
+      local color="$RED"
+      local icon="○"
+    fi
+
+    if [[ "$health" == "healthy" ]]; then
+      local hcolor="$GREEN"
+    elif [[ "$health" == "N/A" ]]; then
+      local hcolor="$YELLOW"
+    else
+      local hcolor="$RED"
+    fi
+
+    printf "${WHITE}║${NC}  ${color}${icon}${NC} %-10s %-14s ${hcolor}%-12s${NC} %-12s ${WHITE}║${NC}\n" \
+      "$svc" "$status" "$health" "$ports"
+  done < <(docker compose ps --format '{{.Service}} {{.State}} {{if .Health}}{{.Health}}{{else}}N/A{{end}} {{.Ports}}' 2>/dev/null | sort)
+
+  echo -e "${WHITE}╠══════════════════════════════════════════════════════════╣${NC}"
+  printf  "${WHITE}║${NC}  App URL : %-43s ${WHITE}║${NC}\n" "$APP_URL"
+  echo -e "${WHITE}╚══════════════════════════════════════════════════════════╝${NC}"
+  echo ""
 }
 
 # ════════════════════════════════════════════════════════════════════════════

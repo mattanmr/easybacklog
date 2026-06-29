@@ -268,7 +268,38 @@ function Invoke-Update {
 
 function Invoke-Status {
     Assert-Docker
-    docker compose ps
+    Write-Host ''
+    Write-Host '╔══════════════════════════════════════════════════════════╗' -ForegroundColor White
+    Write-Host '║               easyBacklog Status                       ║' -ForegroundColor White
+    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
+    Write-Host ('║  {0,-12} {1,-14} {2,-12} {3,-12} ║' -f 'SERVICE','STATUS','HEALTH','PORTS') -ForegroundColor White
+    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
+
+    $lines = docker compose ps --format '{{.Service}} {{.State}} {{if .Health}}{{.Health}}{{else}}N/A{{end}} {{.Ports}}' 2>$null | Sort-Object
+    foreach ($line in $lines) {
+        $parts  = $line -split '\s+', 4
+        $svc    = $parts[0]
+        $status = $parts[1]
+        $health = $parts[2]
+        $ports  = if ($parts.Count -gt 3) { $parts[3] } else { '' }
+
+        $icon  = if ($status -eq 'running') { [char]0x25CF } else { [char]0x25CB }
+        $sColor = if ($status -eq 'running') { 'Green' } else { 'Red' }
+        $hColor = if ($health -eq 'healthy') { 'Green' } elseif ($health -eq 'N/A') { 'Yellow' } else { 'Red' }
+
+        Write-Host '║  ' -ForegroundColor White -NoNewline
+        Write-Host "$icon " -ForegroundColor $sColor -NoNewline
+        Write-Host ('{0,-10} ' -f $svc) -NoNewline
+        Write-Host ('{0,-14} ' -f $status) -NoNewline
+        Write-Host ('{0,-12} ' -f $health) -ForegroundColor $hColor -NoNewline
+        Write-Host ('{0,-12}' -f $ports) -NoNewline
+        Write-Host '║' -ForegroundColor White
+    }
+
+    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
+    Write-Host ('║  App URL : {0,-43} ║' -f $AppUrl) -ForegroundColor White
+    Write-Host '╚══════════════════════════════════════════════════════════╝' -ForegroundColor White
+    Write-Host ''
 }
 
 function Show-Usage {
