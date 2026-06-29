@@ -269,12 +269,13 @@ function Invoke-Update {
 function Invoke-Status {
     Assert-Docker
     Write-Host ''
-    Write-Host '╔══════════════════════════════════════════════════════════╗' -ForegroundColor White
-    Write-Host '║               easyBacklog Status                       ║' -ForegroundColor White
-    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
-    $hdrFmt = '║  {0,-12} {1,-14} {2,-12} {3,-12} ║'
-    Write-Host ($hdrFmt -f 'SERVICE','STATUS','HEALTH','PORTS') -ForegroundColor White
-    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
+    Write-Host '+----------------------------------------------------------+' -ForegroundColor White
+    Write-Host '|               easyBacklog Status                         |' -ForegroundColor White
+    Write-Host '+----------------------------------------------------------+' -ForegroundColor White
+
+    $hdr = '|  {0,-12} {1,-14} {2,-12} {3,-12} |'
+    Write-Host ($hdr -f 'SERVICE','STATUS','HEALTH','PORTS') -ForegroundColor White
+    Write-Host '+----------------------------------------------------------+' -ForegroundColor White
 
     $lines = docker compose ps --format '{{.Service}} {{.State}} {{if .Health}}{{.Health}}{{else}}N/A{{end}} {{.Ports}}' 2>$null | Sort-Object
     foreach ($line in $lines) {
@@ -284,27 +285,27 @@ function Invoke-Status {
         $health = $parts[2]
         $ports  = if ($parts.Count -gt 3) { $parts[3] } else { '' }
 
-        $icon  = if ($status -eq 'running') { [char]0x25CF } else { [char]0x25CB }
+        $icon  = if ($status -eq 'running') { '*' } else { 'o' }
         $sColor = if ($status -eq 'running') { 'Green' } else { 'Red' }
         $hColor = if ($health -eq 'healthy') { 'Green' } elseif ($health -eq 'N/A') { 'Yellow' } else { 'Red' }
 
-        Write-Host '║  ' -ForegroundColor White -NoNewline
+        Write-Host '|  ' -ForegroundColor White -NoNewline
         Write-Host "$icon " -ForegroundColor $sColor -NoNewline
-        $svcFmt = '{0,-10} '
-        Write-Host ($svcFmt -f $svc) -NoNewline
-        $stFmt = '{0,-14} '
-        Write-Host ($stFmt -f $status) -NoNewline
-        $hFmt = '{0,-12} '
-        Write-Host ($hFmt -f $health) -ForegroundColor $hColor -NoNewline
-        $pFmt = '{0,-12}'
-        Write-Host ($pFmt -f $ports) -NoNewline
-        Write-Host '║' -ForegroundColor White
+        $fmt1 = '{0,-10} '
+        Write-Host ($fmt1 -f $svc) -NoNewline
+        $fmt2 = '{0,-14} '
+        Write-Host ($fmt2 -f $status) -NoNewline
+        $fmt3 = '{0,-12} '
+        Write-Host ($fmt3 -f $health) -ForegroundColor $hColor -NoNewline
+        $fmt4 = '{0,-12}'
+        Write-Host ($fmt4 -f $ports) -NoNewline
+        Write-Host '|' -ForegroundColor White
     }
 
-    Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
-    $urlFmt = '║  App URL : {0,-43} ║'
-    Write-Host ($urlFmt -f $AppUrl) -ForegroundColor White
-    Write-Host '╚══════════════════════════════════════════════════════════╝' -ForegroundColor White
+    Write-Host '+----------------------------------------------------------+' -ForegroundColor White
+    $urlLine = '|  App URL : {0,-43} |'
+    Write-Host ($urlLine -f $AppUrl) -ForegroundColor White
+    Write-Host '+----------------------------------------------------------+' -ForegroundColor White
     Write-Host ''
 }
 
