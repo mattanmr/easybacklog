@@ -120,7 +120,7 @@ function Wait-AppHealthy {
 # ── Check if DB is already initialised ────────────────────────────────────
 function Test-DbInitialised {
     $result = docker compose exec -T web bundle exec rails runner `
-        "puts ActiveRecord::Base.connection.tables.any?" 2>$null
+        "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>$null
     return ($result -match 'true')
 }
 

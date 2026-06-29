@@ -122,7 +122,7 @@ wait_healthy() {
 db_initialised() {
   local result
   result=$(docker compose exec -T web bundle exec rails runner \
-    "puts ActiveRecord::Base.connection.tables.any?" 2>/dev/null || echo "false")
+    "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>/dev/null || echo "false")
   [[ "$result" == *"true"* ]]
 }
 
