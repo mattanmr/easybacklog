@@ -272,7 +272,8 @@ function Invoke-Status {
     Write-Host '╔══════════════════════════════════════════════════════════╗' -ForegroundColor White
     Write-Host '║               easyBacklog Status                       ║' -ForegroundColor White
     Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
-    Write-Host ('║  {0,-12} {1,-14} {2,-12} {3,-12} ║' -f 'SERVICE','STATUS','HEALTH','PORTS') -ForegroundColor White
+    $hdrFmt = '║  {0,-12} {1,-14} {2,-12} {3,-12} ║'
+    Write-Host ($hdrFmt -f 'SERVICE','STATUS','HEALTH','PORTS') -ForegroundColor White
     Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
 
     $lines = docker compose ps --format '{{.Service}} {{.State}} {{if .Health}}{{.Health}}{{else}}N/A{{end}} {{.Ports}}' 2>$null | Sort-Object
@@ -289,15 +290,20 @@ function Invoke-Status {
 
         Write-Host '║  ' -ForegroundColor White -NoNewline
         Write-Host "$icon " -ForegroundColor $sColor -NoNewline
-        Write-Host ('{0,-10} ' -f $svc) -NoNewline
-        Write-Host ('{0,-14} ' -f $status) -NoNewline
-        Write-Host ('{0,-12} ' -f $health) -ForegroundColor $hColor -NoNewline
-        Write-Host ('{0,-12}' -f $ports) -NoNewline
+        $svcFmt = '{0,-10} '
+        Write-Host ($svcFmt -f $svc) -NoNewline
+        $stFmt = '{0,-14} '
+        Write-Host ($stFmt -f $status) -NoNewline
+        $hFmt = '{0,-12} '
+        Write-Host ($hFmt -f $health) -ForegroundColor $hColor -NoNewline
+        $pFmt = '{0,-12}'
+        Write-Host ($pFmt -f $ports) -NoNewline
         Write-Host '║' -ForegroundColor White
     }
 
     Write-Host '╠══════════════════════════════════════════════════════════╣' -ForegroundColor White
-    Write-Host ('║  App URL : {0,-43} ║' -f $AppUrl) -ForegroundColor White
+    $urlFmt = '║  App URL : {0,-43} ║'
+    Write-Host ($urlFmt -f $AppUrl) -ForegroundColor White
     Write-Host '╚══════════════════════════════════════════════════════════╝' -ForegroundColor White
     Write-Host ''
 }
