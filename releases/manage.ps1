@@ -119,8 +119,12 @@ function Wait-AppHealthy {
 
 # ── Check if DB is already initialised ────────────────────────────────────
 function Test-DbInitialised {
-    $result = docker compose exec -T web bundle exec rails runner `
-        "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>$null
+    $oldPref = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
+    $result = docker compose exec -T web bundle exec rails runner "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>&1 |
+        Where-Object { $_ -is [string] -or $_ -isnot [System.Management.Automation.ErrorRecord] } |
+        Out-String
+    $ErrorActionPreference = $oldPref
     return ($result -match 'true')
 }
 
@@ -284,6 +288,9 @@ function Invoke-Status {
         $status = $parts[1]
         $health = $parts[2]
         $ports  = if ($parts.Count -gt 3) { $parts[3] } else { '' }
+        if ($ports.Length -gt 20) {
+            $ports = $ports.Substring(0, 20)
+        }
 
         $icon  = if ($status -eq 'running') { '*' } else { 'o' }
         $sColor = if ($status -eq 'running') { 'Green' } else { 'Red' }

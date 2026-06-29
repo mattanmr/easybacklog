@@ -288,6 +288,7 @@ cmd_status() {
     status=$(echo "$line" | awk '{print $2}')
     health=$(echo "$line" | awk '{print $3}')
     ports=$(echo "$line" | awk '{print $4}')
+    ports="${ports:0:20}"
 
     if [[ "$status" == "running" ]]; then
       local color="$GREEN"
