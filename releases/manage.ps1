@@ -119,12 +119,8 @@ function Wait-AppHealthy {
 
 # ── Check if DB is already initialised ────────────────────────────────────
 function Test-DbInitialised {
-    $oldPref = $ErrorActionPreference
-    $ErrorActionPreference = 'SilentlyContinue'
-    $result = docker compose exec -T web bundle exec rails runner "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>&1 |
-        Where-Object { $_ -is [string] -or $_ -isnot [System.Management.Automation.ErrorRecord] } |
-        Out-String
-    $ErrorActionPreference = $oldPref
+    # Run a simple SQL query directly via psql — avoids Rails/Ruby stderr noise entirely
+    $result = docker compose exec -T db psql -U postgres -d easybacklog_development -tAc "SELECT to_regclass('public.users') IS NOT NULL" 2>$null
     return ($result -match 'true')
 }
 

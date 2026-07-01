@@ -121,9 +121,9 @@ wait_healthy() {
 # ── Check if DB is already initialised ────────────────────────────────────
 db_initialised() {
   local result
-  result=$(docker compose exec -T web bundle exec rails runner \
-    "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>/dev/null || echo "false")
-  [[ "$result" == *"true"* ]]
+  result=$(docker compose exec -T db psql -U postgres -d easybacklog_development -tAc \
+    "SELECT to_regclass('public.users') IS NOT NULL" 2>/dev/null || echo "f")
+  [[ "$result" == *"t"* ]]
 }
 
 # ── Initialise the database ────────────────────────────────────────────────
