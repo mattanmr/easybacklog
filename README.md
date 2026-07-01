@@ -112,7 +112,10 @@ All external services (SendGrid, Ably, New Relic) are disabled by default. The a
 
 ## Standalone Release (Pull & Run)
 
-A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog without cloning the repo. It pulls pre-built images from Docker Hub. See [RELEASE_NOTES_RUNTIME.md](RELEASE_NOTES_RUNTIME.md) for end-user instructions.
+The `releases/` folder contains four files shipped with every release: `docker-compose.yml`,
+`.env` (default config), `manage.sh` (Linux/macOS), and `manage.ps1` (Windows). End users
+need only download and run the manage script — it downloads everything else automatically.
+See [RELEASE_NOTES_RUNTIME.md](RELEASE_NOTES_RUNTIME.md) for end-user instructions.
 
 ### Publishing a New Release
 
@@ -144,12 +147,15 @@ A standalone `docker-compose.yml` in `releases/` lets anyone run easyBacklog wit
    .\scripts\test-release-compose.ps1
    ```
 6. If all 28 tests pass, the release is good. Commit and push.
+   Then create a GitHub release and attach: `releases/docker-compose.yml`, `releases/.env`,
+   `releases/manage.sh`, and `releases/manage.ps1`.
 
 ### Release E2E Test
 
 `scripts/test-release-compose.sh` (macOS/Linux) and `scripts/test-release-compose.ps1` (Windows) simulate an end-user experience from scratch:
 
-- Copies the release compose file to an isolated temp directory
+- Copies the release `docker-compose.yml` and `.env` to an isolated temp directory
+- Writes test-specific secret tokens and DB password into the `.env` file
 - Pulls images from Docker Hub, starts all services
 - Initializes the database (schema, seeds, sample data)
 - Runs smoke tests (home page, health endpoint)

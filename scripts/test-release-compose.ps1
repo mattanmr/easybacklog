@@ -35,6 +35,7 @@ $Stopwatch     = [System.Diagnostics.Stopwatch]::StartNew()
 # Resolve paths
 $RepoRoot       = (Resolve-Path "$PSScriptRoot\..").Path
 $ReleaseCompose = Join-Path $RepoRoot 'releases\docker-compose.yml'
+$ReleaseEnv     = Join-Path $RepoRoot 'releases\.env'
 $TempDir        = Join-Path $env:TEMP "easybacklog-release-test-$([guid]::NewGuid().ToString('N').Substring(0,8))"
 
 # ── Helpers ──────────────────────────────────────────────────────────────
@@ -163,16 +164,25 @@ try {
 # ═════════════════════════════════════════════════════════════════════════
 Write-Phase 'PHASE 1: Setup & Isolation'
 
-# 1. Create temp dir & copy release compose file
+# 1. Create temp dir & copy release files (compose + .env)
 New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
 Copy-Item $ReleaseCompose (Join-Path $TempDir 'docker-compose.yml')
-Write-TestResult 'Copy release compose to temp dir' (Test-Path (Join-Path $TempDir 'docker-compose.yml'))
+Copy-Item $ReleaseEnv     (Join-Path $TempDir '.env')
+$filesOk = (Test-Path (Join-Path $TempDir 'docker-compose.yml')) -and (Test-Path (Join-Path $TempDir '.env'))
+Write-TestResult 'Copy release compose and .env to temp dir' $filesOk
 
-# 2-3. Set env vars
-$env:SECRET_TOKEN   = -join ((1..64) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) })
-$env:DEVISE_PEPPER  = -join ((1..32) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) })
-$env:DB_PASSWORD    = 'testpass_' + (Get-Random -Max 99999)
-Write-TestResult 'Environment variables set' ($env:SECRET_TOKEN.Length -gt 0)
+# 2. Write test-specific values into .env (isolates this run from the defaults)
+$TestSecretToken  = -join ((1..64) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) })
+$TestDevisePepper = -join ((1..32) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) })
+$TestDbPassword   = 'testpass_' + (Get-Random -Max 99999)
+$envPath = Join-Path $TempDir '.env'
+$envContent = (Get-Content $envPath) `
+    -replace '^SECRET_TOKEN=.*',  "SECRET_TOKEN=$TestSecretToken"  `
+    -replace '^DEVISE_PEPPER=.*', "DEVISE_PEPPER=$TestDevisePepper" `
+    -replace '^DB_PASSWORD=.*',   "DB_PASSWORD=$TestDbPassword"
+$envContent | Set-Content $envPath -Encoding UTF8
+$envWriteOk = (Get-Content $envPath | Select-String "^SECRET_TOKEN=$TestSecretToken$").Count -gt 0
+Write-TestResult 'Write test-specific values to .env' $envWriteOk
 
 Set-Location $TempDir
 
@@ -411,7 +421,8 @@ if ($healthy2) {
             $status2 = Invoke-WebRequest -Uri "$BaseUrl/status" -UseBasicParsing `
                 -ErrorAction Stop -TimeoutSec 30
             $statusOk2 = $status2.StatusCode -eq 200 -and $status2.Content -match 'healthy'
-        } catch { $retries++ }
+        } catch {}
+        $retries++
     }
 
     # 27. /status still healthy
@@ -435,7 +446,8 @@ Cleanup
     $script:Failed++
     Cleanup
 } finally {
-    # Remove env vars
+    # Remove test variables
+    Remove-Variable -Name TestSecretToken, TestDevisePepper, TestDbPassword -ErrorAction SilentlyContinue
     Remove-Item Env:\SECRET_TOKEN  -ErrorAction SilentlyContinue
     Remove-Item Env:\DEVISE_PEPPER -ErrorAction SilentlyContinue
     Remove-Item Env:\DB_PASSWORD   -ErrorAction SilentlyContinue
