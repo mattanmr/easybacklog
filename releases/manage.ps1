@@ -82,7 +82,7 @@ function Ensure-Files {
     }
     if (-not (Test-Path '.env')) {
         Write-Info 'Downloading .env...'
-        Get-ReleaseFile "$ReleaseBase/.env" '.env'
+        Get-ReleaseFile "$ReleaseBase/default.env" '.env'
         Write-Ok '.env downloaded.'
     }
 }

@@ -90,7 +90,7 @@ ensure_files() {
   fi
   if [[ ! -f .env ]]; then
     info "Downloading .env..."
-    download_file "${RELEASE_BASE}/.env" .env
+    download_file "${RELEASE_BASE}/default.env" .env
     success ".env downloaded."
   fi
 }
