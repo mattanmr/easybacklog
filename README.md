@@ -4,6 +4,30 @@ An intuitive backlog management tool for Agile practitioners. Originally created
 
 See [CHANGELOG.md](CHANGELOG.md) for details on the Docker containerization and other changes made in this fork.
 
+## Quick Start
+
+Download and run a single script — it checks for Docker, downloads all required files,
+starts services, and initialises the database with optional sample data.
+
+**Linux / macOS:**
+```bash
+curl -fsSL https://github.com/mattanmr/easybacklog/releases/latest/download/manage.sh \
+  -o manage.sh && chmod +x manage.sh && ./manage.sh setup
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri https://github.com/mattanmr/easybacklog/releases/latest/download/manage.ps1 `
+  -OutFile manage.ps1; .\manage.ps1 setup
+```
+
+Open the app at http://localhost:3000
+
+Demo credentials (if sample data was loaded):
+- Email: `demo@example.com`
+- Password: `password123`
+
+
 ## Tech Stack
 
 - Ruby on Rails 3.2 / Ruby 2.6.10
